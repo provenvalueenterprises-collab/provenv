@@ -11,7 +11,7 @@ const HeroSlider = () => {
       id: 1,
       title: "MAKE SAVING YOUR DAILY HABIT",
       subtitle: "Join thousands of Nigerians building wealth through automated daily contributions",
-      image: "https://images.pexels.com/photos/3483098/pexels-photo-3483098.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+      image: "images/savings.jpg",
       icon: TrendingUp,
       color: "from-blue-500 to-purple-600"
     },
@@ -19,7 +19,7 @@ const HeroSlider = () => {
       id: 2,
       title: "SECURE & AUTOMATED SAVINGS",
       subtitle: "Your contributions are automatically deducted daily with bank-level security",
-      image: "https://images.pexels.com/photos/4386431/pexels-photo-4386431.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+      image: "images/childfuture.jpg",
       icon: Shield,
       color: "from-purple-500 to-pink-600"
     },

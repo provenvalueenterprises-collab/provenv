@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signIn, useSession } from 'next-auth/react';
@@ -13,16 +15,22 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [mounted, setMounted] = useState(false);
 
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Redirect if already logged in
-  React.useEffect(() => {
-    if (session) {
+  // Prevent hydration issues
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Redirect if already logged in (only after component mounts)
+  useEffect(() => {
+    if (mounted && session && status === 'authenticated') {
       router.push('/dashboard');
     }
-  }, [session, router]);
+  }, [session, status, router, mounted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +49,8 @@ const LoginPage = () => {
         // Handle login errors
         setError(result.error);
       } else if (result?.ok) {
-        router.push('/dashboard');
+        setSuccessMessage('Login successful! Redirecting...');
+        // Let the useEffect handle the redirect
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -63,6 +72,15 @@ const LoginPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to your ProvenValue account</p>
+          
+          {/* Test Credentials Info */}
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h3 className="text-sm font-medium text-blue-800">Test Credentials</h3>
+            <p className="text-sm text-blue-600 mt-1">
+              Email: <code className="bg-blue-100 px-1 rounded">test@example.com</code><br />
+              Password: <code className="bg-blue-100 px-1 rounded">test123</code>
+            </p>
+          </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
