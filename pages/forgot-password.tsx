@@ -20,7 +20,7 @@ const ForgotPasswordPage = () => {
       // For now, just show success - implement forgot password API later
       setSuccess(true);
     } catch (err: any) {
-      const errorMessage = err.message || 'Failed to send reset email';
+      const errorMessage = (err instanceof Error ? err.message : String(err)) || 'Failed to send reset email';
       
       // Check if user needs email verification
       if (errorMessage.toLowerCase().includes('not verified') || 

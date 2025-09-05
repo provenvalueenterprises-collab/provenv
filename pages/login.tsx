@@ -72,15 +72,6 @@ const LoginPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to your ProvenValue account</p>
-          
-          {/* Test Credentials Info */}
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h3 className="text-sm font-medium text-blue-800">Test Credentials</h3>
-            <p className="text-sm text-blue-600 mt-1">
-              Email: <code className="bg-blue-100 px-1 rounded">test@example.com</code><br />
-              Password: <code className="bg-blue-100 px-1 rounded">test123</code>
-            </p>
-          </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">

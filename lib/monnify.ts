@@ -54,6 +54,10 @@ class MonnifyService {
         `${this.config.apiKey}:${this.config.secretKey}`
       ).toString('base64');
 
+      console.log('🔐 Attempting Monnify authentication...');
+      console.log('🌐 Base URL:', this.config.baseUrl);
+      console.log('🔑 API Key:', this.config.apiKey);
+
       const response = await axios.post(
         `${this.config.baseUrl}/api/v1/auth/login`,
         {},
@@ -62,8 +66,12 @@ class MonnifyService {
             Authorization: `Basic ${auth}`,
             'Content-Type': 'application/json',
           },
+          timeout: 10000, // 10 second timeout
         }
       );
+
+      console.log('📡 Monnify auth response status:', response.status);
+      console.log('📄 Monnify auth response data:', response.data);
 
       if (response.data.requestSuccessful) {
         this.accessToken = response.data.responseBody.accessToken;
@@ -74,12 +82,26 @@ class MonnifyService {
           throw new Error('Access token is null despite successful response');
         }
         
+        console.log('✅ Monnify authentication successful');
         return this.accessToken;
       } else {
-        throw new Error('Failed to get access token');
+        console.error('❌ Monnify auth failed:', response.data);
+        throw new Error(`Monnify auth failed: ${response.data.responseMessage || 'Unknown error'}`);
       }
-    } catch (error) {
-      console.error('Monnify auth error:', error);
+    } catch (error: any) {
+      console.error('❌ Monnify authentication error:', error.message);
+      console.error('📄 Error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url
+      });
+      
+      // If this is a 404, the endpoint might be wrong
+      if (error.response?.status === 404) {
+        throw new Error('Monnify API endpoint not found - please check the base URL and API documentation');
+      }
+      
       throw new Error('Failed to authenticate with Monnify');
     }
   }

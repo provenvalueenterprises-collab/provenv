@@ -207,7 +207,9 @@ class DirectDatabaseConnection {
     } catch (error) {
       await client.query('ROLLBACK');
       console.error('❌ Error creating user:', error);
-      return null;
+      
+      // Re-throw the error to preserve constraint violation details
+      throw error;
     } finally {
       client.release();
     }
@@ -281,6 +283,11 @@ class DirectDatabaseConnection {
   // Generate referral code
   private generateReferralCode(): string {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
+  }
+
+  // Get a database client connection (for advanced queries)
+  async getClient() {
+    return await this.pool.connect();
   }
 
   // Close connection pool

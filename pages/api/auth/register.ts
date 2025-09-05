@@ -53,6 +53,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   } catch (error) {
     console.error('❌ Registration error:', error);
+    
+    // Handle specific database constraint violations
+    if (error instanceof Error) {
+      // Check for PostgreSQL unique constraint violations
+      if (error.message.includes('duplicate key value violates unique constraint')) {
+        if (error.message.includes('users_email_key') || error.message.includes('email')) {
+          return res.status(400).json({
+            message: 'An account with this email address already exists. Please use a different email or try logging in.',
+            error: 'EMAIL_ALREADY_EXISTS'
+          });
+        }
+        if (error.message.includes('users_phone_number_key') || error.message.includes('phone_number')) {
+          return res.status(400).json({
+            message: 'An account with this phone number already exists. Please use a different phone number or try logging in.',
+            error: 'PHONE_ALREADY_EXISTS'
+          });
+        }
+      }
+      
+      // Handle the case where userStore returned null due to constraints
+      if (error.message.includes('userStore returned null')) {
+        return res.status(400).json({
+          message: 'Registration failed. The email or phone number may already be in use.',
+          error: 'DUPLICATE_USER_DATA'
+        });
+      }
+    }
+    
     const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     res.status(500).json({
       message: errorMessage,

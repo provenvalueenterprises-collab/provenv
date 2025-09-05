@@ -1,6 +1,6 @@
 // pages/api/payments/initiate.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { monnifyService } from '../../../lib/monnify';
+import { flutterwaveService } from '../../../lib/flutterwave';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 
@@ -29,21 +29,20 @@ export default async function handler(
     // Generate unique payment reference
     const paymentReference = `PV_${Date.now()}_${session.user.id}_${paymentType}`;
 
-    // Initialize payment with Monnify
+    // Initialize payment with Flutterwave
     const paymentData = {
       amount: parseFloat(amount),
       customerName: session.user.name || session.user.email,
       customerEmail: session.user.email,
       paymentReference,
       paymentDescription: description || `Payment for ${paymentType}`,
-      contractCode: process.env.NEXT_PUBLIC_MONNIFY_CONTRACT_CODE!,
       redirectUrl: `${process.env.NEXTAUTH_URL}/payment/success?ref=${paymentReference}`,
-      paymentMethods: ['CARD', 'ACCOUNT_TRANSFER'],
+      currency: 'NGN', // Nigerian Naira
     };
 
-    const response = await monnifyService.initializePayment(paymentData);
+    const response = await flutterwaveService.initializePaymentAlternative(paymentData);
 
-    if (response.requestSuccessful) {
+    if (response.status === 'success') {
       // Store payment record in database (you'll need to implement this)
       // await storePaymentRecord({
       //   userId: session.user.id,
@@ -56,13 +55,18 @@ export default async function handler(
 
       res.status(200).json({
         success: true,
-        checkoutUrl: response.responseBody.checkoutUrl,
-        paymentReference: response.responseBody.paymentReference,
+        data: {
+          link: response.data.link,
+          id: response.data.id,
+          tx_ref: response.data.tx_ref,
+        },
+        paymentReference: response.data.tx_ref,
+        transactionId: response.data.id,
       });
     } else {
       res.status(400).json({
         success: false,
-        message: response.responseMessage,
+        message: response.message,
       });
     }
   } catch (error) {

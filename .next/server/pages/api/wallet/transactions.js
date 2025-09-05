@@ -1,46 +1,22 @@
-"use strict";(()=>{var e={};e.id=315,e.ids=[315],e.modules={8770:e=>{e.exports=require("@nhost/nhost-js")},1649:e=>{e.exports=require("next-auth/react")},145:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},6249:(e,t)=>{Object.defineProperty(t,"l",{enumerable:!0,get:function(){return function e(t,n){return n in t?t[n]:"then"in t&&"function"==typeof t.then?t.then(t=>e(t,n)):"function"==typeof t&&"default"===n?t:void 0}}})},60:(e,t,n)=>{n.r(t),n.d(t,{config:()=>p,default:()=>f,routeModule:()=>h});var s={};n.r(s),n.d(s,{default:()=>l});var r=n(1802),a=n(7153),o=n(6249),u=n(1649),i=n(5985);async function l(e,t){let n=await (0,u.getSession)({req:e});return n?"POST"===e.method?c(e,t,n.user.id):"GET"===e.method?d(e,t,n.user.id):t.status(405).json({message:"Method not allowed"}):t.status(401).json({message:"Unauthorized"})}async function c(e,t,n){let{amount:s,paymentMethod:r,reference:a}=e.body;if(!s||s<=0)return t.status(400).json({message:"Invalid amount"});try{let{data:e,error:r}=await i.qS.graphql.request(`
-      mutation FundWallet($userId: uuid!, $amount: numeric!, $reference: String!) {
-        update_user_profiles(
-          where: {user_id: {_eq: $userId}}
-          _inc: {wallet_balance: $amount}
-        ) {
-          returning {
-            wallet_balance
-          }
-        }
-        
-        insert_wallet_transactions_one(object: {
-          user_id: $userId
-          type: "credit"
-          amount: $amount
-          description: "Wallet funding"
-          reference: $reference
-          status: "completed"
-          payment_method: $paymentMethod
-          created_at: "now()"
-        }) {
-          id
-        }
-      }
-    `,{userId:n,amount:parseFloat(s),reference:a});if(r)return console.error("Error funding wallet:",r),t.status(500).json({message:"Failed to fund wallet"});t.status(200).json({message:"Wallet funded successfully",newBalance:e.update_user_profiles.returning[0].wallet_balance,transactionId:e.insert_wallet_transactions_one.id})}catch(e){console.error("Wallet funding error:",e),t.status(500).json({message:"Internal server error"})}}async function d(e,t,n){try{let{data:e,error:s}=await i.qS.graphql.request(`
-      query GetWalletTransactions($userId: uuid!) {
-        wallet_transactions(
-          where: {user_id: {_eq: $userId}}
-          order_by: {created_at: desc}
-          limit: 50
-        ) {
-          id
-          type
-          amount
-          description
-          reference
-          status
-          payment_method
-          created_at
-        }
-      }
-    `,{userId:n});if(s)return console.error("Error fetching transactions:",s),t.status(500).json({message:"Failed to fetch transactions"});t.status(200).json({transactions:e.wallet_transactions})}catch(e){console.error("Error fetching wallet transactions:",e),t.status(500).json({message:"Internal server error"})}}let f=(0,o.l)(s,"default"),p=(0,o.l)(s,"config"),h=new r.PagesAPIRouteModule({definition:{kind:a.x.PAGES_API,page:"/api/wallet/transactions",pathname:"/api/wallet/transactions",bundlePath:"",filename:""},userland:s})},5985:(e,t,n)=>{n.d(t,{$G:()=>r,qS:()=>s});let s=new(n(8770)).NhostClient({subdomain:"sbpnfqrsnvtyvkgldcco",region:"eu-central-1"});parseInt("5432");let r=async()=>{try{console.log("\uD83D\uDD0D Testing Nhost connection..."),console.log("\uD83D\uDCCD Nhost Config:",{subdomain:"sbpnfqrsnvtyvkgldcco",region:"eu-central-1",useNhost:"true"});let e=s.auth.isAuthenticated();console.log("\uD83D\uDD10 Current auth status:",e);let t=await fetch("https://sbpnfqrsnvtyvkgldcco.nhost.run/v1/graphql",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({query:`
-          query {
-            __typename
-          }
-        `})});if(t.ok)return console.log("✅ Nhost GraphQL endpoint is reachable"),{success:!0,message:"Nhost connection successful"};return console.error("❌ Nhost GraphQL endpoint error:",t.status,t.statusText),{success:!1,message:`HTTP ${t.status}: ${t.statusText}`}}catch(e){return console.error("❌ Nhost connection test failed:",e),{success:!1,message:e instanceof Error?e.message:"Unknown error"}}}},7153:(e,t)=>{var n;Object.defineProperty(t,"x",{enumerable:!0,get:function(){return n}}),function(e){e.PAGES="PAGES",e.PAGES_API="PAGES_API",e.APP_PAGE="APP_PAGE",e.APP_ROUTE="APP_ROUTE"}(n||(n={}))},1802:(e,t,n)=>{e.exports=n(145)}};var t=require("../../../webpack-api-runtime.js");t.C(e);var n=t(t.s=60);module.exports=n})();
+"use strict";(()=>{var e={};e.id=315,e.ids=[315],e.modules={8770:e=>{e.exports=require("@nhost/nhost-js")},8432:e=>{e.exports=require("bcryptjs")},3227:e=>{e.exports=require("next-auth")},2113:e=>{e.exports=require("next-auth/next")},7449:e=>{e.exports=require("next-auth/providers/credentials")},145:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},5900:e=>{e.exports=require("pg")},5831:(e,t,s)=>{s.r(t),s.d(t,{config:()=>p,default:()=>d,routeModule:()=>h});var r={};s.r(r),s.d(r,{default:()=>c});var a=s(1802),n=s(7153),o=s(6249),i=s(2113),u=s(3857),l=s(5900);async function c(e,t){if("GET"!==e.method)return t.status(405).json({message:"Method not allowed"});try{let s=await (0,i.getServerSession)(e,t,u.authOptions);if(!s?.user?.email)return t.status(401).json({message:"Unauthorized"});console.log("\uD83D\uDCB3 Fetching wallet transactions for:",s.user.email);let r=new l.Client({host:"sbpnfqrsnvtyvkgldcco.db.eu-central-1.nhost.run",port:parseInt("5432"),database:"sbpnfqrsnvtyvkgldcco",user:"postgres",password:"Provenvalueenterprise@123!",ssl:{rejectUnauthorized:!1}});await r.connect();let a=`
+      SELECT id FROM users WHERE email = $1
+    `,n=await r.query(a,[s.user.email]);if(0===n.rows.length)return await r.end(),t.status(404).json({message:"User not found"});let o=n.rows[0].id,c=Math.min(parseInt(e.query.limit)||50,100),d=`
+      SELECT 
+        id,
+        transaction_type,
+        type,
+        amount,
+        balance_before,
+        balance_after,
+        reference,
+        status,
+        description,
+        payment_method,
+        external_reference,
+        created_at,
+        updated_at
+      FROM wallet_transactions 
+      WHERE user_id = $1 
+      ORDER BY created_at DESC 
+      LIMIT $2
+    `,p=await r.query(d,[o,c]);await r.end(),console.log(`💳 Found ${p.rows.length} transactions for ${s.user.email}`),t.status(200).json({success:!0,transactions:p.rows,count:p.rows.length})}catch(e){console.error("❌ Error fetching wallet transactions:",e),t.status(500).json({success:!1,message:"Failed to fetch transactions"})}}let d=(0,o.l)(r,"default"),p=(0,o.l)(r,"config"),h=new a.PagesAPIRouteModule({definition:{kind:n.x.PAGES_API,page:"/api/wallet/transactions",pathname:"/api/wallet/transactions",bundlePath:"",filename:""},userland:r})}};var t=require("../../../webpack-api-runtime.js");t.C(e);var s=e=>t(t.s=e),r=t.X(0,[8495],()=>s(5831));module.exports=r})();

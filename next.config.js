@@ -8,9 +8,8 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.nextauth') });
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['images.pexels.com'], // Add any external image domains you're using
+    domains: ['images.pexels.com'],
   },
-  // Load environment variables from .env.nextauth
   env: {
     DB_HOST: process.env.DB_HOST,
     DB_PORT: process.env.DB_PORT,
@@ -19,11 +18,9 @@ const nextConfig = {
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_SSL: process.env.DB_SSL,
   },
-  // Enable experimental features if needed
   experimental: {
-    // Add experimental features here if required
-  }
-  // Removed cron job initialization from next.config.js as it causes build issues
+    esmExternals: false,
+  },
 }
 
 module.exports = nextConfig

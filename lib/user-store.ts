@@ -89,7 +89,8 @@ class DirectDatabaseUserStore {
       return null;
     } catch (error) {
       console.error('❌ Error creating user:', error);
-      return null;
+      // Re-throw the error to preserve constraint violation details
+      throw error;
     }
   }
 

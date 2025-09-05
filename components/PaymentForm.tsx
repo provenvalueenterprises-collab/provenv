@@ -44,9 +44,9 @@ export default function PaymentForm({
 
       const data = await response.json();
 
-      if (data.success) {
-        // Redirect to Monnify checkout
-        window.location.href = data.checkoutUrl;
+      if (data.success && data.data && data.data.link) {
+        // Redirect to Flutterwave checkout
+        window.location.href = data.data.link;
         onSuccess?.(data);
       } else {
         onError?.(data.message || 'Payment initiation failed');
@@ -90,11 +90,11 @@ export default function PaymentForm({
         disabled={loading}
         className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Processing...' : 'Pay with Monnify'}
+        {loading ? 'Processing...' : 'Pay with Flutterwave'}
       </button>
 
       <div className="mt-4 text-sm text-gray-600">
-        <p>You will be redirected to Monnify&apos;s secure payment page</p>
+        <p>You will be redirected to Flutterwave&apos;s secure payment page</p>
         <p>Supported payment methods: Cards, Bank Transfer, USSD</p>
       </div>
     </div>

@@ -1,112 +1,93 @@
+// pages/api/wallet/transactions.ts
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSession } from 'next-auth/react';
-import { nhost } from '../../../lib/nhost';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]';
+import { Client } from 'pg';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req });
-
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
-  if (req.method === 'POST') {
-    return handleFundWallet(req, res, session.user.id);
-  } else if (req.method === 'GET') {
-    return handleGetTransactions(req, res, session.user.id);
-  } else {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
-}
-
-async function handleFundWallet(req: NextApiRequest, res: NextApiResponse, userId: string) {
-  const { amount, paymentMethod, reference } = req.body;
-
-  if (!amount || amount <= 0) {
-    return res.status(400).json({ message: 'Invalid amount' });
-  }
 
   try {
-    // In a real implementation, you would verify the payment with your payment provider
-    // For now, we'll assume the payment is successful
-    
-    // Update user wallet balance
-    const { data, error } = await nhost.graphql.request(`
-      mutation FundWallet($userId: uuid!, $amount: numeric!, $reference: String!) {
-        update_user_profiles(
-          where: {user_id: {_eq: $userId}}
-          _inc: {wallet_balance: $amount}
-        ) {
-          returning {
-            wallet_balance
-          }
-        }
-        
-        insert_wallet_transactions_one(object: {
-          user_id: $userId
-          type: "credit"
-          amount: $amount
-          description: "Wallet funding"
-          reference: $reference
-          status: "completed"
-          payment_method: $paymentMethod
-          created_at: "now()"
-        }) {
-          id
-        }
-      }
-    `, {
-      userId,
-      amount: parseFloat(amount),
-      reference
+    const session = await getServerSession(req, res, authOptions);
+
+    if (!session?.user?.email) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    console.log('💳 Fetching wallet transactions for:', session.user.email);
+
+    // Create PostgreSQL client
+    const client = new Client({
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
     });
 
-    if (error) {
-      console.error('Error funding wallet:', error);
-      return res.status(500).json({ message: 'Failed to fund wallet' });
+    await client.connect();
+
+    // Get user ID
+    const userQuery = `
+      SELECT id FROM users WHERE email = $1
+    `;
+    const userResult = await client.query(userQuery, [session.user.email]);
+
+    if (userResult.rows.length === 0) {
+      await client.end();
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    const userId = userResult.rows[0].id;
+
+    // Get limit from query parameters (default to 50, max 100)
+    const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
+
+    // Get transactions
+    const transactionsQuery = `
+      SELECT 
+        id,
+        transaction_type,
+        type,
+        amount,
+        balance_before,
+        balance_after,
+        reference,
+        status,
+        description,
+        payment_method,
+        external_reference,
+        created_at,
+        updated_at
+      FROM wallet_transactions 
+      WHERE user_id = $1 
+      ORDER BY created_at DESC 
+      LIMIT $2
+    `;
+
+    const transactionsResult = await client.query(transactionsQuery, [userId, limit]);
+
+    await client.end();
+
+    console.log(`💳 Found ${transactionsResult.rows.length} transactions for ${session.user.email}`);
 
     res.status(200).json({
-      message: 'Wallet funded successfully',
-      newBalance: data.update_user_profiles.returning[0].wallet_balance,
-      transactionId: data.insert_wallet_transactions_one.id
+      success: true,
+      transactions: transactionsResult.rows,
+      count: transactionsResult.rows.length
     });
 
   } catch (error) {
-    console.error('Wallet funding error:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-}
-
-async function handleGetTransactions(req: NextApiRequest, res: NextApiResponse, userId: string) {
-  try {
-    const { data, error } = await nhost.graphql.request(`
-      query GetWalletTransactions($userId: uuid!) {
-        wallet_transactions(
-          where: {user_id: {_eq: $userId}}
-          order_by: {created_at: desc}
-          limit: 50
-        ) {
-          id
-          type
-          amount
-          description
-          reference
-          status
-          payment_method
-          created_at
-        }
-      }
-    `, { userId });
-
-    if (error) {
-      console.error('Error fetching transactions:', error);
-      return res.status(500).json({ message: 'Failed to fetch transactions' });
-    }
-
-    res.status(200).json({ transactions: data.wallet_transactions });
-
-  } catch (error) {
-    console.error('Error fetching wallet transactions:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('❌ Error fetching wallet transactions:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch transactions',
+    });
   }
 }

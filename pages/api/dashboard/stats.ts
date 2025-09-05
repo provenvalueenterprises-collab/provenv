@@ -88,16 +88,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Get user ID from session
-    const userId = (session.user as any).id || (session as any).userId;
-    console.log('👤 User ID from session:', userId);
+    // Get user ID from session - try multiple possible locations
+    let userId = (session.user as any).id || 
+                 (session as any).userId || 
+                 (session.user as any).sub ||
+                 (session as any).user?.id;
+    
+    const userEmail = session.user?.email;
+    
+    console.log('👤 Session debugging:', {
+      sessionUser: session.user,
+      userId: userId,
+      userEmail: userEmail,
+      fullSession: JSON.stringify(session, null, 2)
+    });
 
-    if (!userId) {
-      console.log('❌ No user ID found in session');
-      return res.status(400).json({ message: 'User ID not found in session' });
+    if (!userId && !userEmail) {
+      console.log('❌ No user ID or email found in session');
+      return res.status(400).json({ message: 'User identification not found in session' });
     }
 
-    console.log(`🔍 Fetching dashboard data for user: ${userId}`);
+    console.log(`🔍 Fetching dashboard data for user: ${userId || userEmail}`);
 
     // Try direct PostgreSQL connection
     let client;
@@ -110,16 +121,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const testResult = await client.query('SELECT NOW() as current_time');
       console.log('⏰ Database time:', testResult.rows[0].current_time);
 
-      // Fetch user profile data
+      // Fetch user profile data - try by ID first, then by email
       console.log('📊 Fetching user profile...');
-      const profileQuery = `
-        SELECT wallet_balance, bonus_wallet, total_referrals, 
-               fast_track_eligible, fast_track_activated, created_at
-        FROM users_profiles 
-        WHERE user_id = $1
-      `;
-      const profileResult = await client.query(profileQuery, [userId]);
-      console.log(`📊 Profile query returned ${profileResult.rows.length} rows`);
+      let profileQuery, profileParams;
+      
+      if (userId) {
+        profileQuery = `
+          SELECT wallet_balance, bonus_wallet, total_referrals, 
+                 fast_track_eligible, fast_track_activated, created_at
+          FROM users_profiles 
+          WHERE user_id = $1
+        `;
+        profileParams = [userId];
+      } else {
+        // If no userId, try to find by email through auth.users table
+        profileQuery = `
+          SELECT up.wallet_balance, up.bonus_wallet, up.total_referrals, 
+                 up.fast_track_eligible, up.fast_track_activated, up.created_at,
+                 u.id as user_id
+          FROM users_profiles up
+          INNER JOIN auth.users u ON up.user_id = u.id
+          WHERE u.email = $1
+        `;
+        profileParams = [userEmail];
+      }
+      
+      const profileResult = await client.query(profileQuery, profileParams);
+      console.log(`📊 Profile query returned ${profileResult.rows.length} rows for ${userId || userEmail}`);
+      
+      // If we found user by email, update userId for subsequent queries
+      if (!userId && profileResult.rows.length > 0) {
+        userId = profileResult.rows[0].user_id;
+        console.log('🔄 Found user ID from email lookup:', userId);
+      }
 
       // Fetch recent transactions
       console.log('💳 Fetching transactions...');

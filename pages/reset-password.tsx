@@ -56,7 +56,7 @@ const ResetPasswordPage = () => {
 
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || 'Failed to reset password');
+      setError((err instanceof Error ? err.message : String(err)) || 'Failed to reset password');
     } finally {
       setLoading(false);
     }

@@ -1,8 +1,7 @@
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { AuthProvider } from '../contexts/NextAuthContext'
-import '../index.css'
-import '../app/globals.css'
+import '../styles/globals.css'
 
 export default function App({ 
   Component, 

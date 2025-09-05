@@ -104,7 +104,7 @@ const RegisterPage = () => {
         router.push('/login?message=Registration successful, please login');
       }
     } catch (err: any) {
-      setError(err.message || 'Registration failed');
+      setError((err instanceof Error ? err.message : String(err)) || 'Registration failed');
     } finally {
       setLoading(false);
     }
