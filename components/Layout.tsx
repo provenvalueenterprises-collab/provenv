@@ -14,7 +14,9 @@ import {
   Menu,
   X,
   TrendingUp,
-  Shield
+  Shield,
+  Plus,
+  FileText
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -32,13 +34,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const menuItems = [
     { icon: Home, label: 'Dashboard', path: '/dashboard' },
-    { icon: TrendingUp, label: 'My Thrifts', path: '/thrifts' },
-    { icon: Wallet, label: 'Wallet Transactions', path: '/transactions' },
-    { icon: Receipt, label: 'Settlement Accounts', path: '/settlements' },
-    { icon: MessageCircle, label: 'Complaints', path: '/complaints' },
-    { icon: User, label: 'My Profile', path: '/profile' },
+    { icon: TrendingUp, label: 'My Thrifts', path: '/my-thrifts' },
+    { icon: Wallet, label: 'Wallet Transactions', path: '/wallet-transactions' },
+    { icon: Plus, label: 'Add Thrift Account', path: '/add-thrift' },
+    { icon: FileText, label: 'Plans', path: '/plans' },
     { icon: CreditCard, label: 'Fund Wallet', path: '/fund-wallet' },
-    { icon: Settings, label: 'Terms & Conditions', path: '/terms' },
+    { icon: User, label: 'Profile', path: '/profile' },
   ];
 
   if (session?.user?.role === 'admin') {
@@ -48,13 +49,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 shadow-lg transform ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       } transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         
         {/* Logo */}
         <div className="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-green-500 to-blue-600">
-          <h1 className="text-xl font-bold text-white">Proven Value</h1>
+          <h1 className="text-xl font-bold text-white">🎯 ProVenv Dashboard</h1>
         </div>
 
         {/* Navigation */}
@@ -64,7 +65,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Link
                 key={item.path}
                 href={item.path}
-                className="flex items-center px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-green-600 transition-colors duration-200"
+                className={`flex items-center px-4 py-3 rounded-lg transition-colors duration-200 ${
+                  router.pathname === item.path
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
                 onClick={() => setSidebarOpen(false)}
               >
                 <item.icon className="h-5 w-5 mr-3" />
@@ -75,24 +80,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </nav>
 
         {/* User Info & Logout */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
-          <div className="flex items-center mb-3">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
+          <div className="flex items-center mb-3 bg-gray-700 rounded-lg p-3">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
               <span className="text-white font-semibold text-sm">
                 {session?.user?.name?.charAt(0) || 'U'}
               </span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-900">{session?.user?.name}</p>
-              <p className="text-xs text-gray-500">{session?.user?.email}</p>
+              <p className="text-sm font-medium text-white">{session?.user?.name}</p>
+              <p className="text-xs text-gray-400">{session?.user?.email}</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-red-600 transition-colors duration-200"
+            className="flex items-center w-full px-4 py-2 text-gray-300 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-200"
           >
             <LogOut className="h-4 w-4 mr-3" />
-            <span className="font-medium">Logout</span>
+            <span className="font-medium">🚪 Logout</span>
           </button>
         </div>
       </div>
@@ -100,14 +105,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content */}
       <div className="flex-1 lg:ml-0">
         {/* Mobile Header */}
-        <div className="lg:hidden flex items-center justify-between h-16 px-4 bg-white shadow-sm">
+        <div className="lg:hidden flex items-center justify-between h-16 px-4 bg-gray-800 shadow-sm">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700"
           >
             <Menu className="h-6 w-6" />
           </button>
-          <h1 className="text-lg font-semibold text-gray-900">Proven Value</h1>
+          <h1 className="text-lg font-semibold text-white">🎯 ProVenv Dashboard</h1>
           <div className="w-10"></div>
         </div>
 

@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]'
 import { Client } from 'pg'
+const AutoDeductionService = require('../../../lib/auto-deduction-service');
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -90,16 +91,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         'completed', 'Manual test wallet funding'
       ])
 
-      console.log(`📝 Created transaction record: ${transactionResult.rows[0].id}`)
-
       await client.query('COMMIT')
+      
+      console.log(`📝 Created transaction record: ${transactionResult.rows[0].id}`)
+      
+      // Process pending settlements after successful funding
+      try {
+        console.log('🔄 Processing pending settlements...');
+        const autoDeductionService = new AutoDeductionService();
+        await autoDeductionService.processWalletFundingSettlements(user.id, amount);
+        console.log('✅ Settlements processed successfully');
+      } catch (settlementError) {
+        console.error('⚠️ Settlement processing error:', settlementError);
+        // Don't fail the funding if settlement processing fails
+      }
+      
       await client.end()
 
       console.log('🎉 Manual wallet funding completed successfully!')
 
       res.status(200).json({
         success: true,
-        message: 'Test wallet funding successful',
+        message: 'Test wallet funding successful and settlements processed',
         data: {
           previousBalance: currentBalance,
           newBalance: updateResult.rows[0].wallet_balance,

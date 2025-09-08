@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/eAeQDutnB_HprjIcdjssB/_buildManifest.js",
-    "static/eAeQDutnB_HprjIcdjssB/_ssgManifest.js"
+    "static/Dh2L5u1pPOPfUp0RYIQbU/_buildManifest.js",
+    "static/Dh2L5u1pPOPfUp0RYIQbU/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -35,7 +35,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/css/b7efff90f009898e.css",
+      "static/css/d5be7b3c25d4639b.css",
       "static/chunks/pages/_app-189b9ebdfd8eb3e7.js"
     ],
     "/_error": [
@@ -62,7 +62,7 @@
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
-      "static/chunks/pages/admin/dashboard-7143c3ec741d2d48.js"
+      "static/chunks/pages/admin/dashboard-154f520b014eae1e.js"
     ],
     "/dashboard": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -135,7 +135,9 @@
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
-      "static/chunks/pages/register-7c431c7568fd2ff5.js"
+      "static/chunks/613-a7a122d1058b8773.js",
+      "static/css/69cc9dc15dfbf8b9.css",
+      "static/chunks/pages/register-7dd5f97500c9fabc.js"
     ],
     "/reset-password": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -150,6 +152,12 @@
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/pages/test-7c810916eeb65f8f.js"
+    ],
+    "/test-auto-deduction": [
+      "static/chunks/webpack-59c5c889f52620d6.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-eb143115b8bf2786.js",
+      "static/chunks/pages/test-auto-deduction-4a2d718618e85eef.js"
     ],
     "/test-flutterwave": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -173,14 +181,14 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/test-virtual-account-simple-f19c3f6e9664c7a0.js"
+      "static/chunks/pages/test-virtual-account-simple-fbe04a82691d4643.js"
     ],
     "/test-wallet": [
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
-      "static/chunks/pages/test-wallet-baea50216384144e.js"
+      "static/chunks/pages/test-wallet-f9165e1dfa3cee45.js"
     ],
     "/test-wallet-funding": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -221,7 +229,7 @@
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
-      "static/chunks/pages/wallet-transactions-6c43f73a238b250e.js"
+      "static/chunks/pages/wallet-transactions-ad2ac891285af250.js"
     ]
   },
   "ampFirstPages": []

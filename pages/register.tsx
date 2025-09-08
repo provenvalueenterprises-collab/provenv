@@ -4,13 +4,15 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { signIn } from 'next-auth/react';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
+import PhoneInput, { Value } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    phone: '',
+    phone: '' as string | undefined,
     password: '',
     confirmPassword: '',
     referralCode: ''
@@ -54,8 +56,14 @@ const RegisterPage = () => {
       return;
     }
 
-    if (!formData.phone.trim()) {
+    if (!formData.phone || !formData.phone.trim()) {
       setError('Phone number is required');
+      return;
+    }
+
+    // Validate phone number format (should include country code)
+    if (!formData.phone.startsWith('+')) {
+      setError('Please select your country and enter a valid phone number');
       return;
     }
 
@@ -117,8 +125,56 @@ const RegisterPage = () => {
     }));
   };
 
+  const handlePhoneChange = (value: Value) => {
+    setFormData(prev => ({
+      ...prev,
+      phone: value || ''
+    }));
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center px-4 py-8">
+    <>
+      <style jsx global>{`
+        .PhoneInput {
+          width: 100%;
+        }
+        .PhoneInputInput {
+          width: 100%;
+          padding: 12px 16px;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          font-size: 16px;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          padding-left: 60px;
+        }
+        .PhoneInputInput:focus {
+          border-color: #10b981;
+          box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        .PhoneInputCountry {
+          position: absolute;
+          left: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 1;
+        }
+        .PhoneInputCountrySelect {
+          border: none;
+          background: transparent;
+          padding: 4px;
+          font-size: 14px;
+          margin-right: 8px;
+        }
+        .PhoneInputCountryIcon {
+          margin-right: 4px;
+        }
+        .PhoneInputCountrySelectArrow {
+          color: #6b7280;
+          margin-left: 2px;
+        }
+      `}</style>
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Join ProvenValue</h1>
@@ -186,16 +242,20 @@ const RegisterPage = () => {
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                 Phone Number
               </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                placeholder="080XXXXXXXX"
-              />
+              <div className="relative">
+                <PhoneInput
+                  international
+                  countryCallingCodeEditable={false}
+                  defaultCountry="NG"
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                Please select your country and enter your phone number
+              </p>
             </div>
 
             <div>
@@ -303,6 +363,7 @@ const RegisterPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

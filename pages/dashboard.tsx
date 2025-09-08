@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import Layout from '../components/Layout'
 
 interface DashboardData {
   user: {
