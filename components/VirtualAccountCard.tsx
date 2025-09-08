@@ -6,7 +6,7 @@ interface VirtualAccount {
   accountNumber: string
   bankName: string
   accountName: string
-  reference: string
+  accountReference: string  // Changed from 'reference' to match API
   isActive: boolean
   createdAt: string
 }
@@ -38,9 +38,14 @@ const VirtualAccountCard = () => {
 
   const fetchVirtualAccountData = async () => {
     try {
-      const response = await fetch('/api/wallet/virtual-account')
+      // Add cache-busting parameter to ensure fresh data
+      const timestamp = new Date().getTime()
+      const response = await fetch(`/api/wallet/virtual-account?t=${timestamp}`)
       if (response.ok) {
         const data = await response.json()
+        console.log('🏦 Virtual Account API Response:', data)
+        console.log('🔍 Has virtualAccount:', !!data?.virtualAccount)
+        console.log('🔍 virtualAccount data:', data?.virtualAccount)
         setVirtualAccountData(data)
       } else {
         console.error('Failed to fetch virtual account data')
@@ -84,12 +89,31 @@ const VirtualAccountCard = () => {
     }
   }
 
-  const handleFlutterwaveSuccess = (response: any) => {
+  const handleFlutterwaveSuccess = async (response: any) => {
     console.log('Flutterwave payment successful:', response)
-    // Refresh wallet balance
-    fetchVirtualAccountData()
-    setShowFlutterwaveFunding(false)
-    alert('Wallet funding successful! Your wallet will be credited shortly.')
+    
+    try {
+      // Verify payment and update wallet balance
+      console.log('🔍 Verifying payment with server...', response.tx_ref)
+      const verificationResponse = await fetch(`/api/payments/verify/${response.tx_ref}`)
+      const verificationResult = await verificationResponse.json()
+      
+      console.log('✅ Payment verification result:', verificationResult)
+      
+      if (verificationResult.success && verificationResult.verified) {
+        // Refresh wallet balance after successful verification
+        fetchVirtualAccountData()
+        setShowFlutterwaveFunding(false)
+        alert(`Wallet funding successful! ₦${verificationResult.paymentData?.amount?.toLocaleString()} has been added to your wallet.`)
+      } else {
+        setShowFlutterwaveFunding(false)
+        alert('Payment verification failed. Please contact support if money was deducted.')
+      }
+    } catch (error) {
+      console.error('❌ Payment verification error:', error)
+      setShowFlutterwaveFunding(false)
+      alert('Error verifying payment. Please contact support if money was deducted.')
+    }
   }
 
   const copyToClipboard = (text: string) => {
@@ -128,21 +152,55 @@ const VirtualAccountCard = () => {
         <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
+          justifyContent: 'space-between',
           marginBottom: '20px' 
         }}>
-          <span style={{ fontSize: '24px', marginRight: '12px' }}>🏦</span>
-          <h3 style={{ 
-            fontSize: '20px', 
-            fontWeight: 'bold', 
-            color: '#1f2937',
-            margin: 0
-          }}>
-            Virtual Account
-          </h3>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: '24px', marginRight: '12px' }}>🏦</span>
+            <h3 style={{ 
+              fontSize: '20px', 
+              fontWeight: 'bold', 
+              color: '#1f2937',
+              margin: 0
+            }}>
+              Virtual Account
+            </h3>
+          </div>
+          <button
+            onClick={() => {
+              setLoading(true)
+              fetchVirtualAccountData()
+            }}
+            style={{
+              backgroundColor: '#f3f4f6',
+              border: '1px solid #d1d5db',
+              borderRadius: '6px',
+              padding: '6px 12px',
+              fontSize: '12px',
+              cursor: 'pointer',
+              color: '#374151'
+            }}
+          >
+            🔄 Refresh
+          </button>
         </div>
 
         {virtualAccountData?.virtualAccount ? (
           <div>
+            {/* Debug info - remove in production */}
+            <div style={{
+              backgroundColor: '#f0f9ff',
+              border: '1px solid #0ea5e9',
+              borderRadius: '6px',
+              padding: '8px',
+              marginBottom: '16px',
+              fontSize: '12px',
+              color: '#0c4a6e'
+            }}>
+              <strong>Debug:</strong> Virtual Account ID: {virtualAccountData.virtualAccount.id} | 
+              Account: {virtualAccountData.virtualAccount.accountNumber}
+            </div>
+            
             <div style={{
               backgroundColor: '#f3f4f6',
               borderRadius: '8px',

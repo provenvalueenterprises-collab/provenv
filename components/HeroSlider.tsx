@@ -9,35 +9,35 @@ const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      title: "MAKE SAVING YOUR DAILY HABIT",
-      subtitle: "Join thousands of Nigerians building wealth through automated daily contributions",
+      title: "START LITTLE. LIVE BETTER. NEVER LACK.",
+      subtitle: "Join our food network community where Nigerians access essentials with ease while learning daily saving discipline",
       image: "images/savings.jpg",
       icon: TrendingUp,
-      color: "from-blue-500 to-purple-600"
+      color: "from-green-500 to-blue-600"
     },
     {
       id: 2,
-      title: "SECURE & AUTOMATED SAVINGS",
-      subtitle: "Your contributions are automatically deducted daily with bank-level security",
+      title: "FOOD SECURITY FOR EVERY FAMILY",
+      subtitle: "We ensure no family goes hungry through community support and consistent saving habits",
       image: "images/childfuture.jpg",
       icon: Shield,
-      color: "from-purple-500 to-pink-600"
+      color: "from-blue-500 to-green-600"
     },
     {
       id: 3,
-      title: "EARN THROUGH REFERRALS",
-      subtitle: "Get ₦5,000 for each referral and unlock Fast Track with 10+ referrals",
+      title: "GROW TOGETHER AS A COMMUNITY",
+      subtitle: "Support each other and earn rewards while building lasting relationships and food security",
       image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
       icon: Users,
-      color: "from-pink-500 to-red-600"
+      color: "from-orange-500 to-red-600"
     },
     {
       id: 4,
-      title: "VIRTUAL ACCOUNT FUNDING",
-      subtitle: "Get your dedicated virtual account for seamless wallet funding",
+      title: "DAILY SAVINGS, LASTING STABILITY",
+      subtitle: "Learn the discipline of saving a little daily while keeping your household stocked with essentials",
       image: "https://images.pexels.com/photos/4386370/pexels-photo-4386370.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
       icon: Wallet,
-      color: "from-green-500 to-blue-600"
+      color: "from-purple-500 to-pink-600"
     }
   ];
 
@@ -116,16 +116,6 @@ const HeroSlider = () => {
                   className={`px-8 py-4 bg-gradient-to-r ${slides[currentSlide].color} text-white font-bold text-lg rounded-xl shadow-2xl`}
                 >
                   Start Saving Today
-                </motion.button>
-              </Link>
-
-              <Link href="/plans">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 border-2 border-white/30 text-white font-bold text-lg rounded-xl backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all"
-                >
-                  View Plans
                 </motion.button>
               </Link>
             </motion.div>

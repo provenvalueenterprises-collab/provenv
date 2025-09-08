@@ -67,9 +67,11 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
         <div className="flex justify-between items-center h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">PV</span>
-            </div>
+            <img 
+              src="/logo2.jpg" 
+              alt="Proven Value Enterprise" 
+              className="w-10 h-10 rounded-xl object-cover"
+            />
             <span className={`font-bold text-xl ${textClasses}`}>
               ProvenValue
             </span>

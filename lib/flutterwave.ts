@@ -34,21 +34,38 @@ class FlutterwaveService {
 
   constructor() {
     this.config = {
-      publicKey: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
-      secretKey: process.env.FLUTTERWAVE_SECRET_KEY!,
-      encryptionKey: process.env.FLUTTERWAVE_ENCRYPTION_KEY!,
-      webhookSecret: process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH!,
+      publicKey: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY || 'FLWPUBK_TEST-DEVELOPMENT',
+      secretKey: process.env.FLUTTERWAVE_SECRET_KEY || 'FLWSECK_TEST-DEVELOPMENT',
+      encryptionKey: process.env.FLUTTERWAVE_ENCRYPTION_KEY || 'FLWSECK_TEST-encryption',
+      webhookSecret: process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH || 'test-webhook-secret',
     };
 
-    this.flw = new Flutterwave({
-      public_key: this.config.publicKey,
-      secret_key: this.config.secretKey,
-      encryption_key: this.config.encryptionKey
-    });
+    // Check if we have real Flutterwave keys (test or live)
+    const hasRealKeys = this.config.secretKey.startsWith('FLWSECK_TEST-') || 
+                       this.config.secretKey.startsWith('FLWSECK-') ||
+                       (this.config.publicKey.startsWith('FLWPUBK_TEST-') && !this.config.secretKey.includes('SANDBOXDEMOKEY'));
+
+    if (hasRealKeys) {
+      console.log('🔑 Initializing Flutterwave with real credentials...');
+      this.flw = new Flutterwave({
+        public_key: this.config.publicKey,
+        secret_key: this.config.secretKey,
+        encryption_key: this.config.encryptionKey
+      });
+    } else {
+      console.log('🧪 Flutterwave initialized in development mode (placeholder keys detected)');
+      this.flw = null; // Will use mock responses
+    }
   }
 
   async initializePayment(data: PaymentData): Promise<FlutterwaveResponse> {
     try {
+      // Check if we're in development mode
+      if (!this.flw) {
+        console.log('🧪 Development mode - using mock payment response');
+        return this.initializePaymentAlternative(data);
+      }
+
       console.log('🔐 Initializing Flutterwave payment...');
       console.log('💰 Amount:', data.amount);
       console.log('👤 Customer:', data.customerEmail);
@@ -114,7 +131,33 @@ class FlutterwaveService {
 
   async initializePaymentAlternative(data: PaymentData): Promise<FlutterwaveResponse> {
     try {
-      console.log('🔄 Using Flutterwave Hosted Payment Link...');
+      // Check if we have real Flutterwave keys (test or live) vs placeholder keys
+      const hasRealKeys = this.config.secretKey.startsWith('FLWSECK_TEST-') || 
+                         this.config.secretKey.startsWith('FLWSECK-') ||
+                         (this.config.publicKey.startsWith('FLWPUBK_TEST-') && !this.config.secretKey.includes('SANDBOXDEMOKEY'));
+
+      if (!hasRealKeys) {
+        console.log('🧪 Development mode detected - using mock Flutterwave response');
+        console.log('💰 Amount:', data.amount);
+        console.log('👤 Customer:', data.customerEmail);
+        console.log('📝 Reference:', data.paymentReference);
+        
+        // Return a mock successful response that redirects to your test wallet page
+        return {
+          status: 'success',
+          message: 'Mock payment initialized for development',
+          data: {
+            link: `${process.env.NEXTAUTH_URL}/wallet-test?amount=${data.amount}&ref=${data.paymentReference}&email=${data.customerEmail}`,
+            id: `mock_${Date.now()}`,
+            tx_ref: data.paymentReference,
+          },
+        };
+      }
+
+      console.log('🔄 Using Flutterwave Hosted Payment Link with real credentials...');
+      console.log('💰 Amount:', data.amount);
+      console.log('👤 Customer:', data.customerEmail);
+      console.log('📝 Reference:', data.paymentReference);
       
       const payload = {
         tx_ref: data.paymentReference,
@@ -180,19 +223,44 @@ class FlutterwaveService {
 
   async createVirtualAccount(data: {
     email: string;
-    bvn: string;
+    bvn?: string;
+    nin?: string;
     txRef: string;
     isPermanent?: boolean;
   }): Promise<any> {
     try {
       console.log('🏦 Creating virtual account for:', data.email);
       
+      // Check if we're in development mode
+      if (!this.flw) {
+        console.log('🧪 Development mode: Creating mock virtual account');
+        return {
+          status: 'success',
+          message: 'Mock virtual account created for development',
+          data: {
+            account_number: `90${Math.floor(Math.random() * 100000000)}`,
+            bank_name: 'Test Bank (Development)',
+            flw_ref: `MOCK_VA_${Date.now()}`,
+            account_name: data.email.split('@')[0],
+          }
+        };
+      }
+
+      // Use either BVN or NIN (Flutterwave accepts both for static virtual accounts)
+      const identificationNumber = data.bvn || data.nin;
+      if (!identificationNumber) {
+        throw new Error('Either BVN or NIN is required for virtual account creation');
+      }
+
       const payload = {
         email: data.email,
-        bvn: data.bvn,
+        bvn: identificationNumber, // Flutterwave API uses 'bvn' field but accepts both BVN and NIN
         tx_ref: data.txRef,
         is_permanent: data.isPermanent !== false, // Default to true
       };
+
+      console.log('📤 Sending virtual account creation request to Flutterwave...');
+      console.log(`🆔 Using ${data.bvn ? 'BVN' : 'NIN'}:`, identificationNumber);
 
       const response = await this.flw.VirtualAcct.create(payload);
       

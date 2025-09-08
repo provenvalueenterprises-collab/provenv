@@ -8,6 +8,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log('🔍 Wallet Transactions API called')
+  
   if (req.method !== 'GET') {
     return res.status(405).json({ message: 'Method not allowed' });
   }
@@ -15,7 +17,16 @@ export default async function handler(
   try {
     const session = await getServerSession(req, res, authOptions);
 
+    console.log('🔐 Session debug:', {
+      hasSession: !!session,
+      hasUser: !!session?.user,
+      userEmail: session?.user?.email,
+      sessionKeys: session ? Object.keys(session) : [],
+      userKeys: session?.user ? Object.keys(session.user) : []
+    });
+
     if (!session?.user?.email) {
+      console.log('❌ Unauthorized - no session or email');
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
@@ -33,11 +44,16 @@ export default async function handler(
 
     await client.connect();
 
-    // Get user ID
+    // Get user ID using correct auth.users table
     const userQuery = `
-      SELECT id FROM users WHERE email = $1
+      SELECT u.id FROM auth.users u WHERE u.email = $1
     `;
     const userResult = await client.query(userQuery, [session.user.email]);
+    console.log('👤 User lookup result:', {
+      email: session.user.email,
+      found: userResult.rows.length > 0,
+      userId: userResult.rows[0]?.id
+    });
 
     if (userResult.rows.length === 0) {
       await client.end();

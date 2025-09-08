@@ -7,33 +7,33 @@ const HowItWorksSection = () => {
     {
       icon: UserPlus,
       step: "01",
-      title: "Create Your Account",
-      description: "Sign up in minutes with just your email, phone number, and basic information. No paperwork, no hassle.",
-      details: ["Quick 3-minute registration", "Email verification", "Secure account setup"],
-      color: "from-blue-500 to-cyan-500"
+      title: "Register as a Member",
+      description: "Sign up and become part of our food network community. Join thousands of families building food security together.",
+      details: ["Quick 3-minute registration", "Join our community network", "Access member benefits"],
+      color: "from-green-500 to-emerald-500"
     },
     {
       icon: CreditCard,
       step: "02", 
-      title: "Choose Your Plan",
-      description: "Select from our flexible thrift plans - Basic (30 days), Standard (60 days), or Premium (90 days).",
-      details: ["Flexible duration options", "Competitive interest rates", "No hidden fees"],
-      color: "from-purple-500 to-pink-500"
+      title: "Support & Save Daily",
+      description: "Contribute consistently to strengthen your wallet while supporting the community. Learn disciplined saving habits.",
+      details: ["Daily contribution plans", "Build saving discipline", "Community support network"],
+      color: "from-blue-500 to-cyan-500"
     },
     {
       icon: TrendingUp,
       step: "03",
-      title: "Auto-Save Daily",
-      description: "Set up automatic daily contributions. Our system handles everything while you focus on your goals.",
-      details: ["Automated daily deductions", "Secure payment processing", "Real-time tracking"],
-      color: "from-green-500 to-emerald-500"
+      title: "Access Food & Essentials",
+      description: "Enjoy benefits that ensure your family never lacks. Access food and household essentials through our network.",
+      details: ["Access to food supplies", "Household essentials", "Family security guaranteed"],
+      color: "from-purple-500 to-pink-500"
     },
     {
       icon: Gift,
       step: "04",
-      title: "Earn & Withdraw",
-      description: "Watch your money grow with competitive returns. Withdraw anytime or reinvest for compound growth.",
-      details: ["Competitive interest rates", "Flexible withdrawal options", "Reinvestment opportunities"],
+      title: "Grow With Us",
+      description: "Build lasting savings habits while keeping your household stable. Grow together as a community.",
+      details: ["Long-term stability", "Community growth", "Sustained food security"],
       color: "from-orange-500 to-red-500"
     }
   ];
@@ -41,23 +41,23 @@ const HowItWorksSection = () => {
   const benefits = [
     {
       icon: CheckCircle,
-      title: "No Minimum Balance",
-      description: "Start with as little as ₦500"
+      title: "Community Support",
+      description: "Join a network that cares about your family's food security"
     },
     {
       icon: CheckCircle,
-      title: "Daily Flexibility",
-      description: "Adjust contributions anytime"
+      title: "Daily Discipline",
+      description: "Build consistent saving habits that last"
     },
     {
       icon: CheckCircle,
-      title: "Instant Notifications",
-      description: "Real-time updates on your phone"
+      title: "Food Security",
+      description: "Never worry about household essentials again"
     },
     {
       icon: CheckCircle,
-      title: "24/7 Support",
-      description: "Help when you need it most"
+      title: "Family Stability",
+      description: "Ensure your loved ones always have what they need"
     }
   ];
 

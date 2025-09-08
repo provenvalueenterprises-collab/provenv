@@ -160,6 +160,10 @@ class DirectDatabaseConnection {
       const profileQuery = `
         INSERT INTO public.users_profiles (
           user_id,
+          email,
+          first_name,
+          last_name,
+          full_name,
           phone,
           wallet_balance,
           bonus_wallet,
@@ -167,12 +171,22 @@ class DirectDatabaseConnection {
           referral_code,
           fast_track_eligible,
           fast_track_activated
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        RETURNING phone, wallet_balance, bonus_wallet, total_referrals, referral_code, fast_track_eligible, fast_track_activated
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        RETURNING *
       `;
+
+      // Split display name into first and last name
+      const fullName = userData.display_name || 'User'
+      const nameParts = fullName.split(' ')
+      const firstName = nameParts[0] || 'User'
+      const lastName = nameParts.slice(1).join(' ') || ''
 
       const profileValues = [
         newUser.id,
+        userData.email,
+        firstName,
+        lastName,
+        fullName,
         userData.phone || null,
         0, // wallet_balance
         0, // bonus_wallet

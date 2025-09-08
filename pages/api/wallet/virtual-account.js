@@ -43,7 +43,7 @@ export default async function handler(req, res) {
         va.monnify_reference,
         va.is_active,
         va.created_at as virtual_account_created_at
-      FROM users u
+      FROM auth.users u
       LEFT JOIN users_profiles up ON u.id = up.user_id
       LEFT JOIN virtual_accounts va ON u.id = va.user_id AND va.is_active = true
       WHERE u.email = $1
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
 
     await client.end()
 
-    res.status(200).json({
+    const responseData = {
       user: {
         id: user.id,
         email: user.email,
@@ -81,7 +81,11 @@ export default async function handler(req, res) {
         isActive: user.is_active,
         createdAt: user.virtual_account_created_at
       } : null
-    })
+    }
+
+    console.log('📤 Virtual Account API Response:', JSON.stringify(responseData, null, 2))
+
+    res.status(200).json(responseData)
 
   } catch (error) {
     console.error('❌ Error fetching virtual account:', error)

@@ -49,9 +49,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         ta.id,
         ta.status,
         ta.start_date,
-        ta.next_contribution_date,
-        ta.total_contributed,
-        ta.current_balance,
+        ta.last_contribution_date,
+        ta.amount_saved as total_contributed,
+        ta.amount_saved as current_balance,
         ta.settlement_amount,
         ta.is_fast_track,
         ta.created_at,
@@ -61,12 +61,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cp.registration_fee,
         cp.duration_months,
         cp.category,
-        EXTRACT(DAY FROM (CURRENT_DATE - ta.start_date::date)) as days_active,
+        (CURRENT_DATE - ta.start_date::date) as days_active,
         CASE 
           WHEN ta.status = 'active' AND cp.duration_months IS NOT NULL 
-          THEN LEAST(100, (EXTRACT(DAY FROM (CURRENT_DATE - ta.start_date::date)) / (cp.duration_months * 30.0)) * 100)
+          THEN LEAST(100, ((CURRENT_DATE - ta.start_date::date) / (cp.duration_months * 30.0)) * 100)
           ELSE 0
-        END as completion_percentage
+        END as completion_percentage,
+        CASE 
+          WHEN ta.last_contribution_date IS NOT NULL 
+          THEN (ta.last_contribution_date::date + INTERVAL '1 day')::date
+          ELSE (ta.start_date::date + INTERVAL '1 day')::date
+        END as next_contribution_date
       FROM thrift_accounts ta
       JOIN contribution_plans cp ON cp.id = ta.plan_id
       WHERE ta.user_id = $1

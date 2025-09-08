@@ -6,6 +6,7 @@ import AboutUsSection from '../components/AboutUsSection';
 import CoreValuesSection from '../components/CoreValuesSection';
 import FeaturesSection from '../components/FeaturesSection';
 import HowItWorksSection from '../components/HowItWorksSection';
+import TestimonialsSection from '../components/TestimonialsSection';
 import TeamShowcase from '../components/TeamShowcase';
 import ContactSection from '../components/ContactSection';
 import { Phone, Mail, MapPin } from 'lucide-react';
@@ -31,6 +32,9 @@ const HomePage = () => {
       {/* How It Works Section */}
       <HowItWorksSection />
 
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
       {/* Team Showcase */}
       <TeamShowcase />
 
@@ -42,9 +46,9 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4">ProvenValue</h3>
+              <h3 className="text-2xl font-bold mb-4">Proven Value Enterprise</h3>
               <p className="text-gray-400 mb-6">
-                Building wealth for Nigerians through automated, secure savings solutions.
+                Building food security for Nigerian families through community support and disciplined daily saving habits.
               </p>
               <div className="flex space-x-4">
                 <Phone className="h-5 w-5 text-gray-400" />

@@ -50,12 +50,20 @@ export default function SimpleVirtualAccountCard({ user }) {
       const data = await response.json()
 
       if (response.ok) {
-        setVirtualAccount(data.virtualAccount)
+        setVirtualAccount(data.data)
         setShowNinModal(false)
         setNin('')
-        alert('Virtual account created successfully!')
+        
+        // Show appropriate message based on development vs production
+        const message = data.data?.note 
+          ? `Virtual account created successfully!\n\n${data.data.note}`
+          : 'Virtual account created successfully!'
+        
+        alert(message)
       } else {
-        alert('Error: ' + (data.error || 'Failed to create virtual account'))
+        const errorMessage = data.error || 'Failed to create virtual account'
+        const suggestion = data.suggestion ? `\n\nSuggestion: ${data.suggestion}` : ''
+        alert('Error: ' + errorMessage + suggestion)
       }
     } catch (err) {
       alert('Network error occurred')
@@ -320,6 +328,10 @@ export default function SimpleVirtualAccountCard({ user }) {
               textAlign: 'center'
             }}>
               Your NIN is required to create a virtual account for wallet funding.
+              <br />
+              <span style={{ color: '#f59e0b', fontSize: '12px', fontWeight: '500' }}>
+                📝 Development Mode: This will create a mock virtual account for testing
+              </span>
             </p>
 
             <div style={{ marginBottom: '20px' }}>

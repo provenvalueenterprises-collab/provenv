@@ -5,39 +5,39 @@ import { Shield, Users, Heart, Target, Award, Lightbulb } from 'lucide-react';
 const CoreValuesSection = () => {
   const values = [
     {
-      icon: Shield,
-      title: "Trust & Transparency",
-      description: "We build trust through complete transparency in our operations and financial practices, ensuring every member understands how their funds are managed and protected.",
+      icon: Heart,
+      title: "Food Security First",
+      description: "Ensuring our members never run out of food and essentials. We prioritize household stability and access to daily necessities above all else.",
+      color: "from-green-500 to-emerald-500"
+    },
+    {
+      icon: Target,
+      title: "Discipline & Savings",
+      description: "Training members to save a little daily and gain much more. We teach the discipline of consistent contribution for long-term stability.",
       color: "from-blue-500 to-cyan-500"
     },
     {
       icon: Users,
-      title: "Community First",
-      description: "Our success is measured by the success of our community. We prioritize member satisfaction, support, and long-term financial well-being above all else.",
+      title: "Community Empowerment",
+      description: "A system where everyone wins together. We build strong networks where members support each other and grow collectively.",
       color: "from-purple-500 to-pink-500"
     },
     {
-      icon: Heart,
-      title: "Integrity & Ethics",
-      description: "We conduct business with unwavering integrity, maintaining the highest ethical standards in all our dealings and operations.",
-      color: "from-red-500 to-pink-500"
-    },
-    {
-      icon: Target,
-      title: "Innovation & Excellence",
-      description: "We continuously innovate to provide the best financial solutions while maintaining excellence in every aspect of our service delivery.",
-      color: "from-green-500 to-emerald-500"
+      icon: Shield,
+      title: "Transparency & Trust",
+      description: "Clear processes, no hidden practices. We maintain complete transparency in our operations so members can trust and participate with confidence.",
+      color: "from-orange-500 to-red-500"
     },
     {
       icon: Award,
-      title: "Accountability",
-      description: "We take full responsibility for our actions and decisions, ensuring that every member receives fair treatment and excellent service.",
+      title: "Member Support",
+      description: "We provide continuous support to ensure every member succeeds in building their food security and saving habits.",
       color: "from-yellow-500 to-orange-500"
     },
     {
       icon: Lightbulb,
-      title: "Financial Education",
-      description: "We empower our members with knowledge and tools to make informed financial decisions that lead to long-term prosperity.",
+      title: "Community Education",
+      description: "Empowering members with knowledge about food security, household management, and sustainable saving practices.",
       color: "from-indigo-500 to-purple-500"
     }
   ];
@@ -52,10 +52,10 @@ const CoreValuesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Our <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Core Values</span>
+            Our <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">Values</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
-            The principles that guide everything we do at ProvenValue, ensuring we deliver exceptional value to our community
+            The principles that guide our food network community, ensuring every family has access to essentials and builds lasting security
           </p>
         </motion.div>
 
