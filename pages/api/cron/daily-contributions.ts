@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Verify cron secret to prevent unauthorized access
   const authHeader = req.headers.authorization;
-  const expectedSecret = process.env.CRON_SECRET || 'default-cron-secret';
+  const expectedSecret = process.env.CRON_SECRET_TOKEN || 'default-cron-secret';
   
   if (authHeader !== `Bearer ${expectedSecret}`) {
     return res.status(401).json({ message: 'Unauthorized' });

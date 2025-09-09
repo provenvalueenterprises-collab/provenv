@@ -17,6 +17,7 @@ const nextConfig = {
     DB_USER: process.env.DB_USER,
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_SSL: process.env.DB_SSL,
+    CRON_SECRET_TOKEN: process.env.CRON_SECRET_TOKEN,
   },
   experimental: {
     esmExternals: false,
