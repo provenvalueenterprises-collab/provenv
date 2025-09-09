@@ -51,19 +51,24 @@ const RegisterPage = () => {
       return;
     }
 
-    if (!formData.email.trim()) {
-      setError('Email is required');
+    // Require at least one: phone OR email
+    const hasPhone = formData.phone && formData.phone.trim();
+    const hasEmail = formData.email && formData.email.trim();
+
+    if (!hasPhone && !hasEmail) {
+      setError('Please provide either a phone number or email address');
       return;
     }
 
-    if (!formData.phone || !formData.phone.trim()) {
-      setError('Phone number is required');
-      return;
-    }
-
-    // Validate phone number format (should include country code)
-    if (!formData.phone.startsWith('+')) {
+    // Validate phone number format if provided
+    if (hasPhone && !formData.phone!.startsWith('+')) {
       setError('Please select your country and enter a valid phone number');
+      return;
+    }
+
+    // Email validation if provided
+    if (hasEmail && !formData.email.includes('@')) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -93,8 +98,11 @@ const RegisterPage = () => {
 
       // Registration successful - automatically log in the user
       try {
+        // Use phone if provided, otherwise use email
+        const loginIdentifier = formData.phone || formData.email;
+        
         const result = await signIn('credentials', {
-          email: formData.email,
+          identifier: loginIdentifier,
           password: formData.password,
           redirect: false,
         });
@@ -140,229 +148,215 @@ const RegisterPage = () => {
         }
         .PhoneInputInput {
           width: 100%;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
           padding: 12px 16px;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;
+          color: white;
           font-size: 16px;
-          outline: none;
-          transition: border-color 0.2s, box-shadow 0.2s;
-          padding-left: 60px;
+          transition: all 0.3s ease;
         }
         .PhoneInputInput:focus {
-          border-color: #10b981;
-          box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-        }
-        .PhoneInputCountry {
-          position: absolute;
-          left: 8px;
-          top: 50%;
-          transform: translateY(-50%);
-          z-index: 1;
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+          background: rgba(255, 255, 255, 0.08);
         }
         .PhoneInputCountrySelect {
-          border: none;
-          background: transparent;
-          padding: 4px;
-          font-size: 14px;
-          margin-right: 8px;
-        }
-        .PhoneInputCountryIcon {
-          margin-right: 4px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px 0 0 12px;
+          color: white;
         }
         .PhoneInputCountrySelectArrow {
-          color: #6b7280;
-          margin-left: 2px;
+          color: rgba(255, 255, 255, 0.7);
         }
       `}</style>
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center justify-center px-4 py-8">
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Join ProvenValue</h1>
-          <p className="text-gray-600">Create your account and start building wealth</p>
-        </div>
+        
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="bg-gradient-to-r from-blue-400 to-purple-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <UserPlus className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-2">Create Account</h1>
+            <p className="text-gray-300">Join PROVENV and start your financial journey</p>
+          </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {error}
+              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-4">
+                <p className="text-red-200 text-sm">{error}</p>
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="First name"
-                />
-              </div>
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="Last name"
-                />
+            {/* Registration Info */}
+            <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-4 mb-6">
+              <div className="flex items-start space-x-3">
+                <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center mt-0.5">
+                  <span className="text-white text-xs font-bold">✓</span>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-green-200 mb-1">Flexible Registration</h4>
+                  <p className="text-xs text-green-100">
+                    You can register with just a phone number, just an email, or both for maximum security.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                placeholder="Enter your email"
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                    placeholder="John"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                    placeholder="Doe"
+                    required
+                  />
+                </div>
+              </div>
 
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number
-              </label>
-              <div className="relative">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Phone Number (Recommended)
+                </label>
                 <PhoneInput
                   international
-                  countryCallingCodeEditable={false}
                   defaultCountry="NG"
                   value={formData.phone}
                   onChange={handlePhoneChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="Enter your phone number"
+                  placeholder="Enter phone number"
+                  className="phone-input"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Phone verification provides better security
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email Address (Optional if phone provided)
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                  placeholder="john@example.com"
                 />
               </div>
-              <p className="mt-1 text-xs text-gray-500">
-                Please select your country and enter your phone number
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Password *
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                    placeholder="Create a strong password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Confirm Password *
+                </label>
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-12 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                    placeholder="Confirm your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Referral Code (Optional)
+                </label>
+                <input
+                  type="text"
+                  name="referralCode"
+                  value={formData.referralCode}
+                  onChange={handleChange}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none transition-all"
+                  placeholder="Enter referral code"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              >
+                {loading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                ) : (
+                  <>
+                    <UserPlus size={20} />
+                    <span>Create Account</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-gray-300">
+                Already have an account?{' '}
+                <Link href="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+                  Sign in
+                </Link>
               </p>
             </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 pr-12"
-                  placeholder="Create password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 pr-12"
-                  placeholder="Confirm password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
-                Referral Code <span className="text-gray-400">(Optional)</span>
-              </label>
-              <input
-                type="text"
-                id="referralCode"
-                name="referralCode"
-                value={formData.referralCode}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                placeholder="Enter referral code"
-              />
-            </div>
-
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="terms"
-                required
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
-                I agree to the{' '}
-                <Link href="/terms" className="text-primary-600 hover:text-primary-700">
-                  Terms and Conditions
-                </Link>
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-3 rounded-lg font-medium hover:from-primary-700 hover:to-secondary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-              ) : (
-                <UserPlus className="h-5 w-5 mr-2" />
-              )}
-              {loading ? 'Creating account...' : 'Create Account'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Already have an account?{' '}
-              <Link href="/login" className="text-primary-600 hover:text-primary-700 font-medium">
-                Sign in here
-              </Link>
-            </p>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };

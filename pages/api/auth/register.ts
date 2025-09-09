@@ -8,11 +8,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { name, email, phone, password, referral_code } = req.body;
 
-  console.log('📋 Registration request body:', { name, email, phone: phone ? 'provided' : 'missing', password: password ? 'provided' : 'missing', referral_code });
+  console.log('📋 Registration request body:', { 
+    name, 
+    email: email || 'not provided', 
+    phone: phone || 'not provided', 
+    password: password ? 'provided' : 'missing', 
+    referral_code 
+  });
 
-  if (!name || !email || !phone || !password) {
-    console.log('❌ Missing required fields:', { name: !!name, email: !!email, phone: !!phone, password: !!password });
-    return res.status(400).json({ message: 'Missing required fields' });
+  if (!name || !password) {
+    console.log('❌ Missing required fields: name or password');
+    return res.status(400).json({ message: 'Name and password are required' });
+  }
+
+  // Require at least one: phone OR email
+  if (!phone && !email) {
+    console.log('❌ Missing identifier: need phone or email');
+    return res.status(400).json({ message: 'Either phone number or email address is required' });
   }
 
   try {
@@ -22,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Create user in database
     const user = await userStore.createUser({
       display_name: name,
-      email,
+      email: email || null, // Email is optional
       phone,
       phone_number: phone,
       password,

@@ -55,10 +55,42 @@ class DirectDatabaseUserStore {
     }
   }
 
+  // Find user by phone number
+  async findUserByPhone(phone: string): Promise<User | null> {
+    try {
+      console.log('🔍 Finding user by phone:', phone);
+      const user = await directDb.findUserByPhone(phone);
+
+      if (user) {
+        return {
+          id: user.id,
+          display_name: user.display_name,
+          email: user.email,
+          phone: user.phone,
+          phone_number: user.phone_number,
+          passwordHash: user.password_hash,
+          referralCode: user.referral_code,
+          emailVerified: user.email_verified,
+          createdAt: user.created_at,
+          walletBalance: user.wallet_balance,
+          bonusWallet: user.bonus_wallet,
+          totalReferrals: user.total_referrals,
+          fastTrackEligible: user.fast_track_eligible,
+          fastTrackActivated: user.fast_track_activated,
+        };
+      }
+
+      return null;
+    } catch (error) {
+      console.error('❌ Error finding user by phone:', error);
+      return null;
+    }
+  }
+
   // Create new user
   async createUser(userData: {
     display_name: string;
-    email: string;
+    email: string | null;
     phone?: string;
     phone_number?: string;
     password: string;
@@ -128,6 +160,63 @@ class DirectDatabaseUserStore {
       return await directDb.verifyPassword(email, password);
     } catch (error) {
       console.error('❌ Error verifying password:', error);
+      return false;
+    }
+  }
+
+  // Verify user password by phone
+  async verifyPasswordByPhone(phone: string, password: string): Promise<boolean> {
+    try {
+      console.log('🔐 Verifying password for phone:', phone);
+      return await directDb.verifyPasswordByPhone(phone, password);
+    } catch (error) {
+      console.error('❌ Error verifying password by phone:', error);
+      return false;
+    }
+  }
+
+  // Find user by email or phone
+  async findUserByEmailOrPhone(identifier: string): Promise<User | null> {
+    try {
+      console.log('🔍 Finding user by email or phone:', identifier);
+      
+      // Check if identifier looks like an email (contains @)
+      if (identifier.includes('@')) {
+        return await this.findUserByEmail(identifier);
+      } else {
+        return await this.findUserByPhone(identifier);
+      }
+    } catch (error) {
+      console.error('❌ Error finding user by email or phone:', error);
+      return null;
+    }
+  }
+
+  // Verify password for email or phone login
+  async verifyPasswordByEmailOrPhone(identifier: string, password: string): Promise<boolean> {
+    try {
+      console.log('🔐 Verifying password for identifier:', identifier);
+      
+      // Check if identifier looks like an email (contains @)
+      if (identifier.includes('@')) {
+        return await this.verifyPassword(identifier, password);
+      } else {
+        return await this.verifyPasswordByPhone(identifier, password);
+      }
+    } catch (error) {
+      console.error('❌ Error verifying password by identifier:', error);
+      return false;
+    }
+  }
+
+  // Update user password (convenience method for password reset)
+  async updateUserPassword(userId: string, newPassword: string): Promise<boolean> {
+    try {
+      console.log('🔐 Updating password for user:', userId);
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
+      return await this.updateUserProfile(userId, { passwordHash: hashedPassword });
+    } catch (error) {
+      console.error('❌ Error updating user password:', error);
       return false;
     }
   }

@@ -9,22 +9,25 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: 'credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        identifier: { label: 'Email or Phone', type: 'text' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        console.log('🔐 NextAuth authorize called with:', { email: credentials?.email });
+        console.log('🔐 NextAuth authorize called with:', { identifier: credentials?.identifier });
 
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.identifier || !credentials?.password) {
           console.log('❌ Missing credentials');
           return null;
         }
 
         try {
-          // Try Nhost authentication first
-          if (process.env.NEXT_PUBLIC_USE_NHOST !== 'false') {
+          // Check if identifier is email (contains @) or phone number
+          const isEmail = credentials.identifier.includes('@');
+          
+          // Try Nhost authentication first (only for email)
+          if (isEmail && process.env.NEXT_PUBLIC_USE_NHOST !== 'false') {
             try {
-              console.log('🔐 Attempting Nhost authentication for:', credentials.email);
+              console.log('🔐 Attempting Nhost authentication for:', credentials.identifier);
               console.log('🌐 Nhost Config:', {
                 subdomain: process.env.NEXT_PUBLIC_NHOST_SUBDOMAIN,
                 region: process.env.NEXT_PUBLIC_NHOST_REGION,
@@ -32,7 +35,7 @@ export const authOptions: NextAuthOptions = {
               });
 
               const authResponse = await nhost.auth.signIn({
-                email: credentials.email,
+                email: credentials.identifier,
                 password: credentials.password,
               });
 
@@ -57,7 +60,7 @@ export const authOptions: NextAuthOptions = {
 
                 // Get user profile data from direct database
                 console.log('🔍 Fetching user profile data from direct database...');
-                const user = await userStore.findUserByEmail(credentials.email);
+                const user = await userStore.findUserByEmail(credentials.identifier);
 
                 if (user) {
                   console.log('✅ User profile found, returning complete user data');
@@ -102,12 +105,12 @@ export const authOptions: NextAuthOptions = {
               console.error('🔄 Falling back to userStore authentication');
             }
           } else {
-            console.log('⏭️ Nhost authentication skipped (NEXT_PUBLIC_USE_NHOST=false)');
+            console.log('⏭️ Nhost authentication skipped (phone login or NEXT_PUBLIC_USE_NHOST=false)');
           }
 
           // Fallback to direct database authentication
-          console.log('🔄 Using direct database authentication for:', credentials.email);
-          const user = await userStore.findUserByEmail(credentials.email);
+          console.log('🔄 Using direct database authentication for:', credentials.identifier);
+          const user = await userStore.findUserByEmailOrPhone(credentials.identifier);
 
           if (!user) {
             console.log('❌ User not found in database');
@@ -115,7 +118,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           // For direct database, we need to verify password manually
-          const isValid = await userStore.verifyPassword(credentials.email, credentials.password);
+          const isValid = await userStore.verifyPasswordByEmailOrPhone(credentials.identifier, credentials.password);
 
           if (!isValid) {
             console.log('❌ Invalid password');

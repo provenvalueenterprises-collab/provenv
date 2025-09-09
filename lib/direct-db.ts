@@ -103,6 +103,59 @@ class DirectDatabaseConnection {
         fast_track_activated: row.fast_track_activated || false,
       };
     } catch (error) {
+      console.error('Error finding user by email:', error);
+      return null;
+    }
+  }
+
+  // Find user by phone number with profile data
+  async findUserByPhone(phone: string): Promise<User | null> {
+    try {
+      const query = `
+        SELECT
+          u.id,
+          u.display_name,
+          u.email,
+          u.phone_number,
+          u.password_hash,
+          u.email_verified,
+          u.created_at,
+          up.phone,
+          up.wallet_balance,
+          up.bonus_wallet,
+          up.total_referrals,
+          up.referral_code,
+          up.fast_track_eligible,
+          up.fast_track_activated
+        FROM auth.users u
+        LEFT JOIN public.users_profiles up ON u.id = up.user_id
+        WHERE u.phone_number = $1 OR up.phone = $1
+      `;
+
+      const result = await this.pool.query(query, [phone]);
+
+      if (result.rows.length === 0) {
+        return null;
+      }
+
+      const row = result.rows[0];
+      return {
+        id: row.id,
+        display_name: row.display_name,
+        email: row.email,
+        phone_number: row.phone_number,
+        password_hash: row.password_hash,
+        email_verified: row.email_verified,
+        created_at: row.created_at,
+        phone: row.phone,
+        wallet_balance: row.wallet_balance || 0,
+        bonus_wallet: row.bonus_wallet || 0,
+        total_referrals: row.total_referrals || 0,
+        referral_code: row.referral_code,
+        fast_track_eligible: row.fast_track_eligible || false,
+        fast_track_activated: row.fast_track_activated || false,
+      };
+    } catch (error) {
       console.error('❌ Error finding user by email:', error);
       return null;
     }
@@ -111,7 +164,7 @@ class DirectDatabaseConnection {
   // Create new user
   async createUser(userData: {
     display_name: string;
-    email: string;
+    email: string | null;
     phone_number?: string;
     password: string;
     phone?: string;
@@ -141,7 +194,7 @@ class DirectDatabaseConnection {
 
       const userValues = [
         userData.display_name,
-        userData.email,
+        userData.email || null, // Convert empty string to null
         userData.phone_number || null,
         hashedPassword,
         false, // email_verified
@@ -240,6 +293,21 @@ class DirectDatabaseConnection {
       return await bcrypt.compare(password, user.password_hash);
     } catch (error) {
       console.error('❌ Error verifying password:', error);
+      return false;
+    }
+  }
+
+  // Verify user password by phone
+  async verifyPasswordByPhone(phone: string, password: string): Promise<boolean> {
+    try {
+      const user = await this.findUserByPhone(phone);
+      if (!user || !user.password_hash) {
+        return false;
+      }
+
+      return await bcrypt.compare(password, user.password_hash);
+    } catch (error) {
+      console.error('❌ Error verifying password by phone:', error);
       return false;
     }
   }
