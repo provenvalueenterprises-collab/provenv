@@ -1,4 +1,4 @@
-"use strict";(()=>{var e={};e.id=4488,e.ids=[4488],e.modules={145:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},6249:(e,r)=>{Object.defineProperty(r,"l",{enumerable:!0,get:function(){return function e(r,t){return t in r?r[t]:"then"in r&&"function"==typeof r.then?r.then(r=>e(r,t)):"function"==typeof r&&"default"===t?r:void 0}}})},9906:(e,r,t)=>{t.r(r),t.d(r,{config:()=>g,default:()=>c,routeModule:()=>h});var o={};t.r(o),t.d(o,{default:()=>p});var a=t(1802),i=t(7153),n=t(6249);let s=require("nodemailer");var l=t.n(s);class d{constructor(){this.transporter=l().createTransport({host:process.env.SMTP_HOST,port:parseInt(process.env.SMTP_PORT||"587"),secure:"true"===process.env.SMTP_SECURE,auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASSWORD}})}async sendEmail(e){try{let r={from:`"ProvenValue" <${process.env.SMTP_FROM}>`,to:e.to,subject:e.subject,html:e.html,text:e.text},t=await this.transporter.sendMail(r);console.log("Email sent successfully:",t.messageId)}catch(e){throw console.error("Error sending email:",e),Error("Failed to send email")}}async sendVerificationEmail(e,r){let t=`${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${r}`,o=`
+"use strict";(()=>{var e={};e.id=4488,e.ids=[4488],e.modules={145:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},6249:(e,r)=>{Object.defineProperty(r,"l",{enumerable:!0,get:function(){return function e(r,t){return t in r?r[t]:"then"in r&&"function"==typeof r.then?r.then(r=>e(r,t)):"function"==typeof r&&"default"===t?r:void 0}}})},9906:(e,r,t)=>{t.r(r),t.d(r,{config:()=>g,default:()=>c,routeModule:()=>h});var o={};t.r(o),t.d(o,{default:()=>p});var i=t(1802),a=t(7153),n=t(6249);let s=require("nodemailer");var l=t.n(s);class d{constructor(){this.transporter=l().createTransport({host:process.env.SMTP_HOST,port:parseInt(process.env.SMTP_PORT||"587"),secure:"true"===process.env.SMTP_SECURE,auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASSWORD}})}async sendEmail(e){try{let r={from:`"ProvenValue" <${process.env.SMTP_FROM}>`,to:e.to,subject:e.subject,html:e.html,text:e.text},t=await this.transporter.sendMail(r);console.log("Email sent successfully:",t.messageId)}catch(e){throw console.error("Error sending email:",e),Error("Failed to send email")}}async sendVerificationEmail(e,r){let t=`${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${r}`,o=`
       <!DOCTYPE html>
       <html>
         <head>
@@ -23,7 +23,7 @@
           <div class="content">
             <h2>Verify Your Email Address</h2>
             <p>Hi there!</p>
-            <p>Thank you for registering with <span class="highlight">ProvenValue</span>. To complete your registration and start building wealth through our automated savings platform, please verify your email address.</p>
+            <p>Thank you for registering with <span class="highlight">ProvenValue</span>. To complete your registration and start building wealth through our community-driven thrift platform, please verify your email address.</p>
 
             <div style="text-align: center; margin: 30px 0;">
               <a href="${t}" class="button">Verify My Email</a>
@@ -57,7 +57,7 @@
           </div>
         </body>
       </html>
-    `,a=`
+    `,i=`
       Welcome to ProvenValue!
 
       Verify Your Email Address
@@ -76,7 +76,7 @@
       The ProvenValue Team
       support@provenvalue.com
       +234 816 135 7294
-    `;await this.sendEmail({to:e,subject:"Verify Your Email - ProvenValue",html:o,text:a})}async sendWelcomeEmail(e,r){let t=`
+    `;await this.sendEmail({to:e,subject:"Verify Your Email - ProvenValue",html:o,text:i})}async sendWelcomeEmail(e,r){let t=`
       <!DOCTYPE html>
       <html>
         <head>
@@ -109,7 +109,7 @@
                 <li><strong>Complete your profile</strong> - Add your banking details</li>
                 <li><strong>Choose your savings plan</strong> - Daily, weekly, or monthly</li>
                 <li><strong>Invite friends</strong> - Earn ₦5,000 for each referral</li>
-                <li><strong>Watch your money grow</strong> - Automated savings in action</li>
+                <li><strong>Watch your money grow</strong> - Consistent daily contributions</li>
               </ol>
             </div>
 
@@ -119,11 +119,11 @@
 
             <h3>Why Choose ProvenValue?</h3>
             <ul>
-              <li>🔒 <strong>Bank-level security</strong> for your savings</li>
-              <li>⚡ <strong>Automated savings</strong> - no manual transfers needed</li>
-              <li>📈 <strong>Competitive returns</strong> on your investments</li>
-              <li>🎁 <strong>Referral bonuses</strong> up to ₦50,000</li>
-              <li>📱 <strong>Mobile app</strong> for easy management</li>
+              <li>🔒 <strong>Trusted & secure</strong> contribution management</li>
+              <li>⚡ <strong>Consistent savings</strong> - automated daily contributions</li>
+              <li>📈 <strong>Steady growth</strong> with transparent progress tracking</li>
+              <li>🎁 <strong>Community rewards</strong> up to ₦50,000</li>
+              <li>📱 <strong>Easy access</strong> to monitor your progress</li>
             </ul>
 
             <div class="footer">
@@ -137,4 +137,4 @@
           </div>
         </body>
       </html>
-    `;await this.sendEmail({to:e,subject:"Welcome to ProvenValue! \uD83C\uDF89",html:t})}}let u=new d;async function p(e,r){if("POST"!==e.method)return r.status(405).json({message:"Method not allowed"});let{email:t}=e.body;if(!t)return r.status(400).json({message:"Email is required"});try{let e=Math.random().toString(36).substring(2)+Date.now().toString(36);await u.sendVerificationEmail(t,e),console.log("Verification email resent to:",t),r.status(200).json({message:"Verification email sent successfully! Check your inbox."})}catch(e){console.error("Error resending verification email:",e),r.status(500).json({message:"Failed to resend verification email. Please try again later.",error:e instanceof Error?e.message:"Unknown error"})}}let c=(0,n.l)(o,"default"),g=(0,n.l)(o,"config"),h=new a.PagesAPIRouteModule({definition:{kind:i.x.PAGES_API,page:"/api/auth/resend-verification",pathname:"/api/auth/resend-verification",bundlePath:"",filename:""},userland:o})},7153:(e,r)=>{var t;Object.defineProperty(r,"x",{enumerable:!0,get:function(){return t}}),function(e){e.PAGES="PAGES",e.PAGES_API="PAGES_API",e.APP_PAGE="APP_PAGE",e.APP_ROUTE="APP_ROUTE"}(t||(t={}))},1802:(e,r,t)=>{e.exports=t(145)}};var r=require("../../../webpack-api-runtime.js");r.C(e);var t=r(r.s=9906);module.exports=t})();
+    `;await this.sendEmail({to:e,subject:"Welcome to ProvenValue! \uD83C\uDF89",html:t})}}let u=new d;async function p(e,r){if("POST"!==e.method)return r.status(405).json({message:"Method not allowed"});let{email:t}=e.body;if(!t)return r.status(400).json({message:"Email is required"});try{let e=Math.random().toString(36).substring(2)+Date.now().toString(36);await u.sendVerificationEmail(t,e),console.log("Verification email resent to:",t),r.status(200).json({message:"Verification email sent successfully! Check your inbox."})}catch(e){console.error("Error resending verification email:",e),r.status(500).json({message:"Failed to resend verification email. Please try again later.",error:e instanceof Error?e.message:"Unknown error"})}}let c=(0,n.l)(o,"default"),g=(0,n.l)(o,"config"),h=new i.PagesAPIRouteModule({definition:{kind:a.x.PAGES_API,page:"/api/auth/resend-verification",pathname:"/api/auth/resend-verification",bundlePath:"",filename:""},userland:o})},7153:(e,r)=>{var t;Object.defineProperty(r,"x",{enumerable:!0,get:function(){return t}}),function(e){e.PAGES="PAGES",e.PAGES_API="PAGES_API",e.APP_PAGE="APP_PAGE",e.APP_ROUTE="APP_ROUTE"}(t||(t={}))},1802:(e,r,t)=>{e.exports=t(145)}};var r=require("../../../webpack-api-runtime.js");r.C(e);var t=r(r.s=9906);module.exports=t})();

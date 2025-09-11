@@ -17,7 +17,7 @@ const TeamShowcase = () => {
     {
       name: "Mrs. Onu Blessing Rita - AKA Blessed Rita - The Value Adder",
       role: "CEO & Founder",
-      bio: "A visionary entrepreneur and financial expert with over a decade of experience in wealth management and community development. As the driving force behind ProvenValue, she pioneered innovative thrift solutions that have empowered thousands of Nigerians to build generational wealth through disciplined savings and collective investment strategies.",
+      bio: "A visionary entrepreneur and community development expert with over a decade of experience in wealth building and cooperative societies. As the driving force behind ProvenValue, she pioneered innovative thrift solutions that have empowered thousands of Nigerians to build generational wealth through disciplined savings and collective community strategies.",
       image: "blessed-rita.jpg",
       linkedin: "#",
       email: "blessedrita@provenvalue.com"

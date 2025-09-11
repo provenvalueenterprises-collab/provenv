@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/-Lr-I6gxgn_f5vRzzVx1L/_buildManifest.js",
-    "static/-Lr-I6gxgn_f5vRzzVx1L/_ssgManifest.js"
+    "static/bvbITMGENm_ywdLK-3JQT/_buildManifest.js",
+    "static/bvbITMGENm_ywdLK-3JQT/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -16,8 +16,8 @@
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
       "static/chunks/990-7fe5b7f698b3097e.js",
-      "static/chunks/456-d2ce2239e7db5103.js",
-      "static/chunks/pages/index-396f6ffe3f2adb17.js"
+      "static/chunks/697-21b43dccfc467f7d.js",
+      "static/chunks/pages/index-48e7ff519141f518.js"
     ],
     "/LandingPage": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -78,7 +78,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/dashboard-d256b011053af2c1.js"
+      "static/chunks/pages/dashboard-082340678003f6a2.js"
     ],
     "/forgot-password": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -94,13 +94,13 @@
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
-      "static/chunks/pages/fund-wallet-9652f51042d2530e.js"
+      "static/chunks/pages/fund-wallet-f8fa53bc4c015f6a.js"
     ],
     "/investor-dashboard": [
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/investor-dashboard-03a741f5ef6bf761.js"
+      "static/chunks/pages/investor-dashboard-db6d7642bf0d104a.js"
     ],
     "/login": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -133,7 +133,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/plan-selection-709c17e86de1568b.js"
+      "static/chunks/pages/plan-selection-c3af86bcadefef1e.js"
     ],
     "/plans": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -141,7 +141,7 @@
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
       "static/chunks/990-7fe5b7f698b3097e.js",
-      "static/chunks/pages/plans-c13bd5448834d47b.js"
+      "static/chunks/pages/plans-5d770fe615705e9e.js"
     ],
     "/profile": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -207,7 +207,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/test-flutterwave-payment-7520d4aea9d94743.js"
+      "static/chunks/pages/test-flutterwave-payment-d52c7b1304c6b212.js"
     ],
     "/test-simple-virtual-account": [
       "static/chunks/webpack-59c5c889f52620d6.js",

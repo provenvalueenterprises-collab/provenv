@@ -1,61 +1,61 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Smartphone, Clock, TrendingUp, Users, Wallet, Bell, Lock, BarChart3 } from 'lucide-react';
+import { Shield, Truck, Users, TrendingUp, Heart, MapPin, Bell, Target, BarChart3 } from 'lucide-react';
 
 const FeaturesSection = () => {
   const features = [
     {
       icon: Shield,
-      title: "Bank-Level Security",
-      description: "Your money and data are protected with enterprise-grade encryption and security protocols",
+      title: "Food Security Guarantee",
+      description: "Ensure your family never goes hungry with our reliable food supply network and community support system",
       color: "from-blue-500 to-cyan-500"
     },
     {
-      icon: Smartphone,
-      title: "Mobile-First Design",
-      description: "Seamless experience across all devices with our intuitive mobile app and web platform",
+      icon: Truck,
+      title: "Direct Food Distribution",
+      description: "Get fresh food and household essentials delivered directly to your community through our trusted network",
       color: "from-purple-500 to-pink-500"
     },
     {
-      icon: Clock,
-      title: "Automated Savings",
-      description: "Set it and forget it - our system automatically handles your daily thrift contributions",
+      icon: Users,
+      title: "Community Food Network",
+      description: "Connect with local families and food suppliers to build a sustainable community food support system",
       color: "from-green-500 to-emerald-500"
     },
     {
       icon: TrendingUp,
-      title: "Competitive Returns",
-      description: "Earn attractive returns on your savings with our transparent and competitive rate structure",
+      title: "Affordable Food Access",
+      description: "Access quality food and essentials at reduced prices through our collective buying power and partnerships",
       color: "from-orange-500 to-red-500"
     },
     {
-      icon: Users,
-      title: "Referral Rewards",
-      description: "Earn bonus income by referring friends and family to join the ProvenValue community",
+      icon: Heart,
+      title: "Family Support Programs",
+      description: "Join programs designed to support families in need while building strong community bonds and mutual aid",
       color: "from-teal-500 to-blue-500"
     },
     {
-      icon: Wallet,
-      title: "Flexible Withdrawals",
-      description: "Access your funds when you need them with our flexible withdrawal options and emergency fund feature",
+      icon: MapPin,
+      title: "Local Food Hubs",
+      description: "Access nearby food distribution points and connect with local farmers and food suppliers in your area",
       color: "from-indigo-500 to-purple-500"
     },
     {
       icon: Bell,
-      title: "Smart Notifications",
-      description: "Stay informed with real-time notifications about contributions, rewards, and account activities",
+      title: "Food Alert System",
+      description: "Get notified about food distributions, emergency food aid, and community support opportunities",
       color: "from-yellow-500 to-orange-500"
     },
     {
-      icon: Lock,
-      title: "Goal Setting & Tracking",
-      description: "Set financial goals and track your progress with detailed analytics and insights",
+      icon: Target,
+      title: "Hunger Prevention",
+      description: "Participate in proactive programs that prevent hunger before it happens through planning and preparation",
       color: "from-pink-500 to-rose-500"
     },
     {
       icon: BarChart3,
-      title: "Detailed Analytics",
-      description: "Monitor your savings progress with comprehensive reports and financial insights",
+      title: "Impact Tracking",
+      description: "Monitor how your participation helps families in your community overcome hunger and food insecurity",
       color: "from-cyan-500 to-teal-500"
     }
   ];
@@ -70,10 +70,10 @@ const FeaturesSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Powerful <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Features</span>
+            How We <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">End Hunger</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Everything you need to build wealth systematically with cutting-edge technology and user-friendly features
+            Our comprehensive food security network ensures no family goes hungry while building stronger communities through mutual support
           </p>
         </motion.div>
 
@@ -113,23 +113,23 @@ const FeaturesSection = () => {
           className="mt-20 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl p-8 md:p-12 text-white text-center"
         >
           <h3 className="text-3xl font-bold mb-4">
-            Join Over 10,000+ Nigerians Building Wealth
+            Join 1000+ Nigerians Overcoming Hunger & Building Food Security
           </h3>
           <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-            Start your financial journey today with Nigeria&apos;s most trusted automated thrift platform
+            Be part of Nigeria&apos;s most impactful community food network ensuring no family goes hungry
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <div className="bg-white/20 backdrop-blur rounded-xl p-6 text-center">
-              <div className="text-3xl font-bold">₦2.5B+</div>
-              <div className="text-sm opacity-80">Total Savings</div>
+              <div className="text-3xl font-bold">5,000+</div>
+              <div className="text-sm opacity-80">Families Fed</div>
             </div>
             <div className="bg-white/20 backdrop-blur rounded-xl p-6 text-center">
-              <div className="text-3xl font-bold">10,000+</div>
-              <div className="text-sm opacity-80">Active Users</div>
+              <div className="text-3xl font-bold">1,000+</div>
+              <div className="text-sm opacity-80">Active Members</div>
             </div>
             <div className="bg-white/20 backdrop-blur rounded-xl p-6 text-center">
-              <div className="text-3xl font-bold">99.9%</div>
-              <div className="text-sm opacity-80">Uptime</div>
+              <div className="text-3xl font-bold">42+</div>
+              <div className="text-sm opacity-80">Food Distributions</div>
             </div>
           </div>
         </motion.div>

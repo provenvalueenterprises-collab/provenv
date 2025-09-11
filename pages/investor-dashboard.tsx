@@ -318,7 +318,7 @@ export default function InvestorDashboard() {
             💼 Investor Dashboard
           </h1>
           <p style={{ margin: 0, color: '#6b7280' }}>
-            Welcome back, {data.user.name}! Monitor your thrift investments and portfolio performance.
+            Welcome back, {data.user.name}! Monitor your thrift contributions and savings performance.
           </p>
         </div>
 
@@ -565,7 +565,7 @@ export default function InvestorDashboard() {
             marginTop: '30px'
           }}>
             <h3 style={{ fontSize: '18px', marginBottom: '20px', color: '#1f2937' }}>
-              🎯 Active Investment Accounts
+              🎯 Active Savings Accounts
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {data.thriftAccounts.map((account: any, index: number) => (
@@ -590,7 +590,7 @@ export default function InvestorDashboard() {
           </div>
         )}
 
-        {/* Investment Performance Summary */}
+        {/* Savings Performance Summary */}
         <div style={{
           backgroundColor: 'white',
           padding: '25px',
@@ -599,7 +599,7 @@ export default function InvestorDashboard() {
           marginTop: '30px'
         }}>
           <h3 style={{ fontSize: '18px', marginBottom: '15px', color: '#1f2937' }}>
-            📈 Investment Performance
+            📈 Savings Performance
           </h3>
           <div style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.6' }}>
             <div style={{ marginBottom: '10px' }}>
@@ -609,7 +609,7 @@ export default function InvestorDashboard() {
               <strong>Projected Maturity Value:</strong> ₦{(data.cards.currentBalance * 1.2).toLocaleString()}
             </div>
             <div style={{ marginBottom: '10px' }}>
-              <strong>Investment Progress:</strong> Week {data.cards.currentWeek} of 52
+              <strong>Savings Progress:</strong> Week {data.cards.currentWeek} of 52
             </div>
             <div>
               <strong>Affiliate Earnings:</strong> ₦{data.cards.bonusWallet.toLocaleString()}

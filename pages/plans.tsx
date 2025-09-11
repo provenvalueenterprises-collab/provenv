@@ -10,7 +10,7 @@ const PlansPage = () => {
       duration: "30 days",
       minAmount: 500,
       description: "Perfect for beginners looking to start their savings journey",
-      features: ["Daily contributions", "Automated savings", "Basic support", "Secure wallet"],
+      features: ["Daily contributions", "Consistent savings", "Basic support", "Secure platform"],
       color: "from-blue-500 to-cyan-600",
       recommended: false
     },
@@ -19,7 +19,7 @@ const PlansPage = () => {
       duration: "60 days",
       minAmount: 1000,
       description: "Great for consistent savers building wealth steadily",
-      features: ["Daily contributions", "Automated savings", "Priority support", "Referral bonus", "Virtual account"],
+      features: ["Daily contributions", "Consistent savings", "Priority support", "Community rewards", "Virtual account"],
       color: "from-purple-500 to-pink-600",
       recommended: true
     },
@@ -28,7 +28,7 @@ const PlansPage = () => {
       duration: "90 days", 
       minAmount: 2000,
       description: "For serious savers committed to long-term wealth building",
-      features: ["Daily contributions", "Automated savings", "VIP support", "Referral bonus", "Fast track eligible", "Premium rewards"],
+      features: ["Daily contributions", "Consistent savings", "VIP support", "Community rewards", "Fast track eligible", "Premium benefits"],
       color: "from-emerald-500 to-teal-600",
       recommended: false
     }

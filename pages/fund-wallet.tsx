@@ -60,7 +60,7 @@ export default function FundWallet() {
           <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Fund Your Wallet</h1>
             <p className="text-gray-600">
-              Add money to your ProVenv investment wallet using your virtual account or card payment
+              Add money to your ProVenv savings wallet using your virtual account or card payment
             </p>
           </div>
 

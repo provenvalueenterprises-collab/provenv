@@ -383,7 +383,7 @@ export default function PlanSelection() {
             </p>
             <ul style={{ paddingLeft: '20px', margin: 0 }}>
               <li>⚡ Settlement in <strong>9 months instead of 12</strong></li>
-              <li>💰 <strong>₦50,000 total referral bonus</strong></li>
+              <li>💰 <strong>₦50,000 total community rewards</strong></li>
               <li>🎁 <strong>₦5,000 recharge card reward</strong></li>
             </ul>
           </div>

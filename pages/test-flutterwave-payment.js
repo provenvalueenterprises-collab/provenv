@@ -27,7 +27,7 @@ export default function TestFlutterwaveFunding() {
     },
     customizations: {
       title: 'Fund ProVenv Wallet',
-      description: 'Add money to your ProVenv investment wallet',
+      description: 'Add money to your ProVenv savings wallet',
       logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
     },
   }

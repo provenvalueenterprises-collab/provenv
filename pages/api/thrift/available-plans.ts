@@ -156,11 +156,11 @@ function generatePlanFeatures(plan: any): string[] {
   if (plan.category === 'least') {
     features.push('Perfect for beginners', 'Low daily commitment', 'Flexible payment options');
   } else if (plan.category === 'medium') {
-    features.push('Balanced savings approach', 'Good return on investment', 'Moderate daily commitment');
+    features.push('Balanced savings approach', 'Good growth potential', 'Moderate daily commitment');
   } else if (plan.category === 'standard') {
     features.push('Excellent returns', 'Multiple account benefits', 'Priority customer support');
   } else if (plan.category === 'mega') {
-    features.push('Premium investment option', 'Maximum account benefits', 'VIP customer support');
+    features.push('Premium savings option', 'Maximum account benefits', 'VIP customer support');
   }
 
   return features;
@@ -180,7 +180,7 @@ function getRecommendedFor(category: string): string {
   switch (category) {
     case 'least': return 'First-time savers, Small budget savers';
     case 'medium': return 'Regular savers, Goal-oriented individuals';
-    case 'standard': return 'Committed savers, Investment growth';
+    case 'standard': return 'Committed savers, Steady growth';
     case 'mega': return 'Serious investors, High-value portfolios';
     default: return 'General savers';
   }

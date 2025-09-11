@@ -68,7 +68,7 @@ class EmailService {
           <div class="content">
             <h2>Verify Your Email Address</h2>
             <p>Hi there!</p>
-            <p>Thank you for registering with <span class="highlight">ProvenValue</span>. To complete your registration and start building wealth through our automated savings platform, please verify your email address.</p>
+            <p>Thank you for registering with <span class="highlight">ProvenValue</span>. To complete your registration and start building wealth through our community-driven thrift platform, please verify your email address.</p>
 
             <div style="text-align: center; margin: 30px 0;">
               <a href="${verificationUrl}" class="button">Verify My Email</a>
@@ -167,7 +167,7 @@ class EmailService {
                 <li><strong>Complete your profile</strong> - Add your banking details</li>
                 <li><strong>Choose your savings plan</strong> - Daily, weekly, or monthly</li>
                 <li><strong>Invite friends</strong> - Earn ₦5,000 for each referral</li>
-                <li><strong>Watch your money grow</strong> - Automated savings in action</li>
+                <li><strong>Watch your money grow</strong> - Consistent daily contributions</li>
               </ol>
             </div>
 
@@ -177,11 +177,11 @@ class EmailService {
 
             <h3>Why Choose ProvenValue?</h3>
             <ul>
-              <li>🔒 <strong>Bank-level security</strong> for your savings</li>
-              <li>⚡ <strong>Automated savings</strong> - no manual transfers needed</li>
-              <li>📈 <strong>Competitive returns</strong> on your investments</li>
-              <li>🎁 <strong>Referral bonuses</strong> up to ₦50,000</li>
-              <li>📱 <strong>Mobile app</strong> for easy management</li>
+              <li>🔒 <strong>Trusted & secure</strong> contribution management</li>
+              <li>⚡ <strong>Consistent savings</strong> - automated daily contributions</li>
+              <li>📈 <strong>Steady growth</strong> with transparent progress tracking</li>
+              <li>🎁 <strong>Community rewards</strong> up to ₦50,000</li>
+              <li>📱 <strong>Easy access</strong> to monitor your progress</li>
             </ul>
 
             <div class="footer">

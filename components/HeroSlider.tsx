@@ -9,8 +9,8 @@ const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      title: "START LITTLE. LIVE BETTER. NEVER LACK.",
-      subtitle: "Join our food network community where Nigerians access essentials with ease while learning daily saving discipline",
+      title: "END HUNGER. BUILD COMMUNITY. THRIVE TOGETHER.",
+      subtitle: "Join our food network community where Nigerian families access essentials while building supportive community connections",
       image: "images/savings.jpg",
       icon: TrendingUp,
       color: "from-green-500 to-blue-600"
@@ -18,7 +18,7 @@ const HeroSlider = () => {
     {
       id: 2,
       title: "FOOD SECURITY FOR EVERY FAMILY",
-      subtitle: "We ensure no family goes hungry through community support and consistent saving habits",
+      subtitle: "We ensure no family goes hungry through our community food distribution network and mutual support system",
       image: "images/childfuture.jpg",
       icon: Shield,
       color: "from-blue-500 to-green-600"
@@ -26,15 +26,15 @@ const HeroSlider = () => {
     {
       id: 3,
       title: "GROW TOGETHER AS A COMMUNITY",
-      subtitle: "Support each other and earn rewards while building lasting relationships and food security",
+      subtitle: "Connect with local families and food suppliers while building lasting relationships that ensure food security for all",
       image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
       icon: Users,
       color: "from-orange-500 to-red-600"
     },
     {
       id: 4,
-      title: "DAILY SAVINGS, LASTING STABILITY",
-      subtitle: "Learn the discipline of saving a little daily while keeping your household stocked with essentials",
+      title: "SUSTAINABLE FOOD NETWORK MARKETING",
+      subtitle: "Be part of a network that connects food suppliers with families in need while creating economic opportunities for all",
       image: "https://images.pexels.com/photos/4386370/pexels-photo-4386370.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
       icon: Wallet,
       color: "from-purple-500 to-pink-600"
@@ -115,7 +115,7 @@ const HeroSlider = () => {
                   whileTap={{ scale: 0.95 }}
                   className={`px-8 py-4 bg-gradient-to-r ${slides[currentSlide].color} text-white font-bold text-lg rounded-xl shadow-2xl`}
                 >
-                  Start Saving Today
+                  Join Food Network
                 </motion.button>
               </Link>
             </motion.div>

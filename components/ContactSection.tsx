@@ -66,7 +66,7 @@ const ContactSection = () => {
   const faqs = [
     {
       question: "How safe is my money with ProvenValue?",
-      answer: "Your funds are secured with bank-level security protocols and are held in licensed financial institutions."
+      answer: "Your contributions are secured with trusted security measures and managed through established financial practices."
     },
     {
       question: "Can I withdraw my money anytime?",
@@ -77,7 +77,7 @@ const ContactSection = () => {
       answer: "No worries! You can catch up on missed contributions or adjust your plan to fit your current situation."
     },
     {
-      question: "How do I earn referral bonuses?",
+      question: "How do I earn community rewards?",
       answer: "Share your unique referral code with friends. You earn bonuses when they sign up and start saving with us."
     }
   ];

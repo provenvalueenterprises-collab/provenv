@@ -44,6 +44,8 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [creatingVirtualAccount, setCreatingVirtualAccount] = useState(false)
 
   // Function to copy text to clipboard
   const copyToClipboard = async (text: string) => {
@@ -53,6 +55,40 @@ export default function Dashboard() {
     } catch (err) {
       console.error('Failed to copy:', err)
       alert('Failed to copy to clipboard')
+    }
+  }
+
+  // Function to create virtual account
+  const createVirtualAccount = async () => {
+    if (creatingVirtualAccount) return
+    
+    try {
+      setCreatingVirtualAccount(true)
+      
+      const response = await fetch('/api/wallet/create-virtual-account', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          nin: '12345678901' // You might want to collect this from user or profile
+        })
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert('Virtual account created successfully!')
+        // Refresh dashboard data to show the new virtual account
+        window.location.reload()
+      } else {
+        alert(`Failed to create virtual account: ${result.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error creating virtual account:', error)
+      alert('Failed to create virtual account')
+    } finally {
+      setCreatingVirtualAccount(false)
     }
   }
 

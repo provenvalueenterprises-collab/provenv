@@ -1,39 +1,39 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus, CreditCard, TrendingUp, Gift, CheckCircle } from 'lucide-react';
+import { UserPlus, Users, Truck, Heart, CheckCircle } from 'lucide-react';
 
 const HowItWorksSection = () => {
   const steps = [
     {
       icon: UserPlus,
       step: "01",
-      title: "Register as a Member",
-      description: "Sign up and become part of our food network community. Join thousands of families building food security together.",
-      details: ["Quick 3-minute registration", "Join our community network", "Access member benefits"],
+      title: "Join Our Food Network",
+      description: "Register to become part of our community food security network. Connect with families and local food suppliers.",
+      details: ["Quick registration process", "Connect with local community", "Access food network benefits"],
       color: "from-green-500 to-emerald-500"
     },
     {
-      icon: CreditCard,
+      icon: Users,
       step: "02", 
-      title: "Support & Save Daily",
-      description: "Contribute consistently to strengthen your wallet while supporting the community. Learn disciplined saving habits.",
-      details: ["Daily contribution plans", "Build saving discipline", "Community support network"],
+      title: "Build Community Connections",
+      description: "Connect with other families and local food providers. Build relationships that ensure mutual support and food access.",
+      details: ["Connect with local families", "Network with food suppliers", "Build community relationships"],
       color: "from-blue-500 to-cyan-500"
     },
     {
-      icon: TrendingUp,
+      icon: Truck,
       step: "03",
-      title: "Access Food & Essentials",
-      description: "Enjoy benefits that ensure your family never lacks. Access food and household essentials through our network.",
-      details: ["Access to food supplies", "Household essentials", "Family security guaranteed"],
+      title: "Access Food Distribution",
+      description: "Receive regular food supplies and household essentials through our organized distribution network.",
+      details: ["Regular food deliveries", "Household essentials access", "Community pickup points"],
       color: "from-purple-500 to-pink-500"
     },
     {
-      icon: Gift,
+      icon: Heart,
       step: "04",
-      title: "Grow With Us",
-      description: "Build lasting savings habits while keeping your household stable. Grow together as a community.",
-      details: ["Long-term stability", "Community growth", "Sustained food security"],
+      title: "Support Others in Need",
+      description: "Help other families while ensuring your own food security. Create a sustainable cycle of community support.",
+      details: ["Help families in need", "Sustainable community support", "Long-term food security"],
       color: "from-orange-500 to-red-500"
     }
   ];
@@ -41,23 +41,23 @@ const HowItWorksSection = () => {
   const benefits = [
     {
       icon: CheckCircle,
+      title: "Food Security Guarantee",
+      description: "Never worry about where your next meal will come from"
+    },
+    {
+      icon: CheckCircle,
       title: "Community Support",
-      description: "Join a network that cares about your family's food security"
+      description: "Access a network that cares about your family's wellbeing"
     },
     {
       icon: CheckCircle,
-      title: "Daily Discipline",
-      description: "Build consistent saving habits that last"
+      title: "Emergency Food Aid",
+      description: "Get immediate help during difficult times"
     },
     {
       icon: CheckCircle,
-      title: "Food Security",
-      description: "Never worry about household essentials again"
-    },
-    {
-      icon: CheckCircle,
-      title: "Family Stability",
-      description: "Ensure your loved ones always have what they need"
+      title: "Sustainable Impact",
+      description: "Be part of ending hunger in your community"
     }
   ];
 
@@ -71,10 +71,10 @@ const HowItWorksSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            How <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">It Works</span>
+            How We <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">End Hunger</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Start building wealth in 4 simple steps. It&apos;s easier than you think!
+            Join our food security network in 4 simple steps. Together, we ensure no family goes hungry!
           </p>
         </motion.div>
 
