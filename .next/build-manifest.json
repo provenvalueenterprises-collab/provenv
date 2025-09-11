@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/bvbITMGENm_ywdLK-3JQT/_buildManifest.js",
-    "static/bvbITMGENm_ywdLK-3JQT/_ssgManifest.js"
+    "static/ffqkkcIV1XAVD9bOk6ejr/_buildManifest.js",
+    "static/ffqkkcIV1XAVD9bOk6ejr/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -35,7 +35,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/css/1668e0f2d9c2d27d.css",
+      "static/css/30e91472ef994329.css",
       "static/chunks/pages/_app-189b9ebdfd8eb3e7.js"
     ],
     "/_error": [
@@ -78,7 +78,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/dashboard-082340678003f6a2.js"
+      "static/chunks/pages/dashboard-8df548f16d5f8773.js"
     ],
     "/forgot-password": [
       "static/chunks/webpack-59c5c889f52620d6.js",

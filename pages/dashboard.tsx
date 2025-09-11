@@ -58,6 +58,12 @@ export default function Dashboard() {
     }
   }
 
+  // Function to handle navigation and close mobile sidebar
+  const handleNavigation = (path: string) => {
+    setSidebarOpen(false)
+    router.push(path)
+  }
+
   // Function to create virtual account
   const createVirtualAccount = async () => {
     if (creatingVirtualAccount) return
@@ -193,20 +199,55 @@ export default function Dashboard() {
       backgroundColor: '#f9fafb',
       minHeight: '100vh'
     }}>
+      {/* Mobile Header with Hamburger Menu */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white shadow-sm border-b border-gray-200 z-30 flex items-center px-4">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          aria-label="Toggle menu"
+        >
+          <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <h1 className="ml-3 text-lg font-semibold text-gray-800">Dashboard</h1>
+      </div>
+
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div style={{
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        width: '250px',
-        height: '100vh',
-        backgroundColor: '#1f2937',
-        color: 'white',
-        padding: '20px',
-        overflowY: 'auto',
-        zIndex: 1000
-      }}>
-        <h2 style={{ fontSize: '20px', marginBottom: '30px', color: '#10b981' }}>
+      <div 
+        className={`
+          fixed left-0 top-0 w-64 h-full bg-gray-800 text-white p-5 overflow-y-auto z-50 
+          transition-transform duration-300 ease-in-out
+          lg:translate-x-0 lg:static lg:z-10
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}
+      >
+        {/* Mobile Close Button */}
+        <div className="lg:hidden flex justify-between items-center mb-6">
+          <h2 style={{ fontSize: '20px', color: '#10b981' }}>
+            🎯 ProVenv
+          </h2>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Close menu"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Desktop Header */}
+        <h2 className="hidden lg:block" style={{ fontSize: '20px', marginBottom: '30px', color: '#10b981' }}>
           🎯 ProVenv Dashboard
         </h2>
         
@@ -257,7 +298,7 @@ export default function Dashboard() {
             📊 Dashboard
           </button>
           <button 
-            onClick={() => router.push('/my-thrifts')}
+            onClick={() => handleNavigation('/my-thrifts')}
             style={{
               backgroundColor: 'transparent',
               color: 'white',
@@ -272,7 +313,7 @@ export default function Dashboard() {
             🎯 My Thrifts
           </button>
           <button 
-            onClick={() => router.push('/add-thrift')}
+            onClick={() => handleNavigation('/add-thrift')}
             style={{
               backgroundColor: 'transparent',
               color: 'white',
@@ -287,7 +328,7 @@ export default function Dashboard() {
             ➕ Add Thrift Account
           </button>
           <button 
-            onClick={() => router.push('/wallet-transactions')}
+            onClick={() => handleNavigation('/wallet-transactions')}
             style={{
               backgroundColor: 'transparent',
               color: 'white',
@@ -302,7 +343,7 @@ export default function Dashboard() {
             💳 Wallet Transactions
           </button>
           <button 
-            onClick={() => router.push('/plans')}
+            onClick={() => handleNavigation('/plans')}
             style={{
               backgroundColor: 'transparent',
               color: 'white',
@@ -317,7 +358,7 @@ export default function Dashboard() {
             📋 Plans
           </button>
           <button 
-            onClick={() => router.push('/fund-wallet')}
+            onClick={() => handleNavigation('/fund-wallet')}
             style={{
               backgroundColor: 'transparent',
               color: 'white',
@@ -332,7 +373,7 @@ export default function Dashboard() {
             💳 Fund Wallet
           </button>
           <button 
-            onClick={() => router.push('/profile')}
+            onClick={() => handleNavigation('/profile')}
             style={{
               backgroundColor: 'transparent',
               color: 'white',
@@ -350,7 +391,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main Content */}
-      <div style={{ marginLeft: '250px', padding: '20px' }}>
+      <div className="lg:ml-64 pt-16 lg:pt-0 p-5">
         <h1 style={{ fontSize: '28px', marginBottom: '20px', color: '#1f2937' }}>
           Welcome to your dashboard!
         </h1>
