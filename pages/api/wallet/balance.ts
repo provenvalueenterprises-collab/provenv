@@ -35,7 +35,7 @@ export default async function handler(
     const query = `
       SELECT u.id, u.email, up.wallet_balance
       FROM users u 
-      JOIN users_profiles up ON u.id = up.user_id 
+      LEFT JOIN users_profiles up ON u.id = up.user_id 
       WHERE u.email = $1
     `;
     

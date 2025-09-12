@@ -37,22 +37,27 @@ export default async function handler(req, res) {
 
     await client.connect()
 
-    // Get user profile
+    // Get user profile - using auth.users table (correct table for authenticated users)
     const userQuery = `
-      SELECT u.id, u.email, u.display_name, up.phone, up.wallet_balance
-      FROM users u 
+      SELECT 
+        u.id, 
+        u.email, 
+        u.display_name,
+        up.phone, 
+        up.wallet_balance
+      FROM auth.users u 
       LEFT JOIN users_profiles up ON u.id = up.user_id 
       WHERE u.email = $1
     `
     const userResult = await client.query(userQuery, [session.user.email])
 
     if (userResult.rows.length === 0) {
-      // Skip automatic user creation since we don't know the exact schema
-      // Return error instead of trying to create users
       await client.end()
+      console.log(`❌ User not found in users table for email: ${session.user.email}`)
       return res.status(404).json({ 
-        error: 'User not found. Please contact support to set up your account.',
-        code: 'USER_NOT_FOUND'
+        error: 'User profile not found. Please complete your profile setup first.',
+        code: 'USER_PROFILE_REQUIRED',
+        action: 'Please visit your profile page to complete your account setup, then try again.'
       })
     }
 

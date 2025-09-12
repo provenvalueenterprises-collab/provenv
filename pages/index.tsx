@@ -79,7 +79,7 @@ const HomePage = () => {
               <div className="space-y-4">
                 <div className="flex items-center">
                   <Mail className="h-5 w-5 text-gray-400 mr-2" />
-                  <span className="text-gray-400">support@provenvalue.ng</span>
+                  <span className="text-gray-400">support@provenvalueenterprise.com</span>
                 </div>
                 <div className="flex items-center">
                   <MapPin className="h-5 w-5 text-gray-400 mr-2" />
@@ -90,7 +90,7 @@ const HomePage = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 ProvenValue. All rights reserved.</p>
+            <p>&copy; 2025 Proven Value Enterprise. All rights reserved.</p>
           </div>
         </div>
       </footer>

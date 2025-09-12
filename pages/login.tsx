@@ -106,7 +106,7 @@ const LoginPage = () => {
               <LogIn className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-white mb-2">Welcome Back</h1>
-            <p className="text-gray-300">Sign in to your ProVenv account</p>
+            <p className="text-gray-300">Sign in to your Proven Value account</p>
           </div>
 
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20">

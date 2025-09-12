@@ -68,6 +68,14 @@ export default function Dashboard() {
   const createVirtualAccount = async () => {
     if (creatingVirtualAccount) return
     
+    // Prompt user for NIN if not available
+    const nin = prompt('Please enter your NIN (National Identification Number) to create virtual account:')
+    
+    if (!nin || nin.length !== 11) {
+      alert('Please enter a valid 11-digit NIN')
+      return
+    }
+    
     try {
       setCreatingVirtualAccount(true)
       
@@ -77,7 +85,7 @@ export default function Dashboard() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          nin: '12345678901' // You might want to collect this from user or profile
+          nin: nin
         })
       })
 
@@ -88,11 +96,16 @@ export default function Dashboard() {
         // Refresh dashboard data to show the new virtual account
         window.location.reload()
       } else {
-        alert(`Failed to create virtual account: ${result.error || 'Unknown error'}`)
+        console.error('Virtual account creation failed:', result)
+        if (result.code === 'USER_PROFILE_REQUIRED') {
+          alert(`Profile Setup Required: ${result.error}\n\n${result.action || 'Please complete your profile setup first.'}`)
+        } else {
+          alert(`Failed to create virtual account: ${result.error || 'Unknown error'}`)
+        }
       }
     } catch (error) {
       console.error('Error creating virtual account:', error)
-      alert('Failed to create virtual account')
+      alert('Network error: Failed to create virtual account')
     } finally {
       setCreatingVirtualAccount(false)
     }
@@ -461,7 +474,7 @@ export default function Dashboard() {
               </button>
             </div>
           ) : (
-            /* No Virtual Account Card */
+            /* No Virtual Account Card - Generate Button */
             <div style={{
               background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
               borderRadius: '12px',
@@ -479,11 +492,29 @@ export default function Dashboard() {
                 🏦 Virtual Account
               </div>
               <div style={{ 
-                fontSize: '18px', 
-                fontWeight: 'bold'
+                fontSize: '14px', 
+                marginBottom: '15px',
+                opacity: 0.8
               }}>
-                Not Set
+                Generate your virtual account to receive payments and fund your wallet easily.
               </div>
+              <button
+                onClick={createVirtualAccount}
+                disabled={creatingVirtualAccount}
+                style={{
+                  background: creatingVirtualAccount ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.3)',
+                  border: '1px solid rgba(255, 255, 255, 0.4)',
+                  color: 'white',
+                  padding: '10px 16px',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  cursor: creatingVirtualAccount ? 'not-allowed' : 'pointer',
+                  fontWeight: '600',
+                  width: '100%'
+                }}
+              >
+                {creatingVirtualAccount ? '⏳ Creating...' : '🚀 Generate Virtual Account'}
+              </button>
             </div>
           )}
 

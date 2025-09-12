@@ -42,18 +42,22 @@ export default async function handler(req, res) {
 
     await client.connect()
 
-    // Get user and current wallet balance
+    // Get user and current wallet balance  
     const userQuery = `
       SELECT u.id, u.email, up.wallet_balance 
-      FROM users u 
-      JOIN users_profiles up ON u.id = up.user_id 
+      FROM auth.users u 
+      LEFT JOIN users_profiles up ON u.id = up.user_id 
       WHERE u.email = $1
     `
     const userResult = await client.query(userQuery, [session.user.email])
 
     if (userResult.rows.length === 0) {
       await client.end()
-      return res.status(404).json({ error: 'User not found' })
+      console.log(`❌ User not found for wallet funding: ${session.user.email}`)
+      return res.status(404).json({ 
+        error: 'User profile not found. Please complete your profile setup first.',
+        code: 'USER_PROFILE_REQUIRED'
+      })
     }
 
     const user = userResult.rows[0]

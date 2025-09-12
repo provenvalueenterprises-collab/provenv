@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/ffqkkcIV1XAVD9bOk6ejr/_buildManifest.js",
-    "static/ffqkkcIV1XAVD9bOk6ejr/_ssgManifest.js"
+    "static/nSkuaUYLUUCpEHNI_9rta/_buildManifest.js",
+    "static/nSkuaUYLUUCpEHNI_9rta/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -17,13 +17,13 @@
       "static/chunks/664-d254d21a6fe56bff.js",
       "static/chunks/990-7fe5b7f698b3097e.js",
       "static/chunks/697-21b43dccfc467f7d.js",
-      "static/chunks/pages/index-48e7ff519141f518.js"
+      "static/chunks/pages/index-07519dd97895e7fd.js"
     ],
     "/LandingPage": [
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/LandingPage-855758ae4879b74e.js"
+      "static/chunks/pages/LandingPage-dfc644ca40e2b0ba.js"
     ],
     "/LoginPage": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -78,7 +78,7 @@
       "static/chunks/webpack-59c5c889f52620d6.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
-      "static/chunks/pages/dashboard-8df548f16d5f8773.js"
+      "static/chunks/pages/dashboard-123a30560d60b715.js"
     ],
     "/forgot-password": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -107,7 +107,7 @@
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-eb143115b8bf2786.js",
       "static/chunks/664-d254d21a6fe56bff.js",
-      "static/chunks/pages/login-3ad096955f3a8b5e.js"
+      "static/chunks/pages/login-1aed61cf36998efc.js"
     ],
     "/mobile-demo": [
       "static/chunks/webpack-59c5c889f52620d6.js",
@@ -167,7 +167,7 @@
       "static/chunks/924-258514f826c7b64a.js",
       "static/chunks/562-b115cc85c13d9636.js",
       "static/css/69cc9dc15dfbf8b9.css",
-      "static/chunks/pages/register-with-otp-a9bc74dd4644483b.js"
+      "static/chunks/pages/register-with-otp-c45de3e9889aec67.js"
     ],
     "/registration-test": [
       "static/chunks/webpack-59c5c889f52620d6.js",

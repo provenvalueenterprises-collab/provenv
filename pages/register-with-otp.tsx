@@ -323,7 +323,7 @@ const RegisterWithOTPPage = () => {
                 <UserPlus className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-              <p className="text-gray-300">Join PROVENV and start your financial journey</p>
+              <p className="text-gray-300">Join Proven Value Enterprise and start the war against hunger</p>
             </div>
 
             {error && (
