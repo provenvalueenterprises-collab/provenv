@@ -63,25 +63,6 @@ const ContactSection = () => {
     }
   ];
 
-  const faqs = [
-    {
-      question: "How safe is my money with ProvenValue?",
-      answer: "Your contributions are secured with trusted security measures and managed through established financial practices."
-    },
-    {
-      question: "Can I withdraw my money anytime?",
-      answer: "Yes, you can withdraw your funds anytime, though early withdrawal from some plans may affect your interest earnings."
-    },
-    {
-      question: "What happens if I miss a daily contribution?",
-      answer: "No worries! You can catch up on missed contributions or adjust your plan to fit your current situation."
-    },
-    {
-      question: "How do I earn community rewards?",
-      answer: "Share your unique referral code with friends. You earn bonuses when they sign up and start saving with us."
-    }
-  ];
-
   return (
     <section id="contact" className="py-20 bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,7 +189,7 @@ const ContactSection = () => {
             )}
           </motion.div>
 
-          {/* Contact Info & FAQs */}
+          {/* Contact Info */}
           <div className="space-y-8">
             {/* Contact Info */}
             <motion.div
@@ -236,25 +217,6 @@ const ContactSection = () => {
                     </div>
                   );
                 })}
-              </div>
-            </motion.div>
-
-            {/* FAQs */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl shadow-xl p-8"
-            >
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h3>
-              <div className="space-y-4">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
-                    <h4 className="font-semibold text-gray-900 mb-2">{faq.question}</h4>
-                    <p className="text-gray-600 text-sm">{faq.answer}</p>
-                  </div>
-                ))}
               </div>
             </motion.div>
           </div>

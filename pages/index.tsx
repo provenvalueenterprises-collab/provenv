@@ -70,7 +70,6 @@ const HomePage = () => {
               <div className="space-y-2">
                 <Link href="/terms" className="text-gray-400 hover:text-white block transition-colors">Terms & Conditions</Link>
                 <Link href="/contact" className="text-gray-400 hover:text-white block transition-colors">Contact Us</Link>
-                <Link href="/faq" className="text-gray-400 hover:text-white block transition-colors">FAQ</Link>
               </div>
             </div>
             
