@@ -40,7 +40,7 @@ const ContactSection = () => {
     {
       icon: Mail,
       title: "Email Us",
-      details: ["support@provenvalueenterprise.com", "hello@provenvalueenterprise.com"],
+      details: ["support@provenvalueenterprise.com", "provenvalueenterprise@gmail.com"],
       subtitle: "Get help within 24 hours"
     },
     {
