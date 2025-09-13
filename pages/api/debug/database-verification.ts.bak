@@ -1,0 +1,149 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
+import { Client } from 'pg';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    // Authentication required
+    const session = await getServerSession(req, res, authOptions);
+    if (!session?.user?.email) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    const client = new Client({
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    });
+
+    await client.connect();
+
+    const userEmail = session.user.email;
+    const results = {
+      timestamp: new Date().toISOString(),
+      user_email: userEmail,
+      database_data: {
+        auth_user: null,
+        user_profiles: null,
+        wallet: null,
+        plans: null,
+        contribution_history: null
+      }
+    };
+
+    // 1. Check auth.users table
+    try {
+      const authUserQuery = `SELECT id, email, display_name, created_at FROM auth.users WHERE email = $1`;
+      const authUserResult = await client.query(authUserQuery, [userEmail]);
+      results.database_data.auth_user = authUserResult.rows[0] || null;
+    } catch (error) {
+      results.database_data.auth_user = { error: error.message };
+    }
+
+    // 2. Check users_profiles table
+    if (results.database_data.auth_user?.id) {
+      try {
+        const profileQuery = `
+          SELECT user_id, wallet_balance, bonus_wallet, total_referrals, 
+                 phone, nin, fast_track_eligible, fast_track_activated,
+                 created_at, updated_at
+          FROM users_profiles 
+          WHERE user_id = $1
+        `;
+        const profileResult = await client.query(profileQuery, [results.database_data.auth_user.id]);
+        results.database_data.user_profile = profileResult.rows[0] || null;
+      } catch (error) {
+        results.database_data.user_profile = { error: error.message };
+      }
+
+      // 3. Check virtual_accounts table
+      try {
+        const virtualAccountQuery = `
+          SELECT id, user_id, account_number, bank_name, account_name, 
+                 monnify_reference, is_active, created_at
+          FROM virtual_accounts 
+          WHERE user_id = $1
+        `;
+        const virtualAccountResult = await client.query(virtualAccountQuery, [results.database_data.auth_user.id]);
+        results.database_data.virtual_accounts = virtualAccountResult.rows;
+      } catch (error) {
+        results.database_data.virtual_accounts = { error: error.message };
+      }
+
+      // 4. Check thrift_accounts table
+      try {
+        const thriftQuery = `
+          SELECT ta.id, ta.user_id, ta.plan_id, ta.status, ta.start_date, 
+                 ta.maturity_date, ta.amount_saved, ta.settlement_amount,
+                 ta.created_at, cp.name as plan_name, cp.daily_amount
+          FROM thrift_accounts ta
+          LEFT JOIN contribution_plans cp ON ta.plan_id = cp.id
+          WHERE ta.user_id = $1
+        `;
+        const thriftResult = await client.query(thriftQuery, [results.database_data.auth_user.id]);
+        results.database_data.thrift_accounts = thriftResult.rows;
+      } catch (error) {
+        results.database_data.thrift_accounts = { error: error.message };
+      }
+
+      // 5. Check wallet_transactions table
+      try {
+        const transactionsQuery = `
+          SELECT id, user_id, amount, transaction_type, reference, status,
+                 balance_before, balance_after, description, created_at
+          FROM wallet_transactions 
+          WHERE user_id = $1
+          ORDER BY created_at DESC
+          LIMIT 10
+        `;
+        const transactionsResult = await client.query(transactionsQuery, [results.database_data.auth_user.id]);
+        results.database_data.wallet_transactions = transactionsResult.rows;
+      } catch (error) {
+        results.database_data.wallet_transactions = { error: error.message };
+      }
+
+      // 6. Check referrals table (if exists)
+      try {
+        const referralsQuery = `
+          SELECT id, referrer_id, referred_id, status, reward_amount, created_at
+          FROM referrals 
+          WHERE referrer_id = $1
+          ORDER BY created_at DESC
+        `;
+        const referralsResult = await client.query(referralsQuery, [results.database_data.auth_user.id]);
+        results.database_data.referrals = referralsResult.rows;
+      } catch (error) {
+        results.database_data.referrals = { error: error.message };
+      }
+    }
+
+    // 7. Check table schemas to understand structure
+    try {
+      const tablesQuery = `
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_schema = 'public' 
+        AND table_name IN ('users_profiles', 'virtual_accounts', 'thrift_accounts', 'wallet_transactions', 'referrals', 'contribution_plans')
+      `;
+      const tablesResult = await client.query(tablesQuery);
+      results.database_data.available_tables = tablesResult.rows.map(row => row.table_name);
+    } catch (error) {
+      results.database_data.available_tables = { error: error.message };
+    }
+
+    await client.end();
+
+    return res.status(200).json(results);
+
+  } catch (error) {
+    console.error('Database verification error:', error);
+    return res.status(500).json({ 
+      error: 'Database verification failed',
+      message: error.message 
+    });
+  }
+}

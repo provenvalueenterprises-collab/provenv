@@ -69,6 +69,7 @@ const HomePage = () => {
               <h4 className="font-bold mb-4">Support</h4>
               <div className="space-y-2">
                 <Link href="/terms" className="text-gray-400 hover:text-white block transition-colors">Terms & Conditions</Link>
+                <Link href="/refund-policy" className="text-gray-400 hover:text-white block transition-colors">Refund Policy</Link>
                 <Link href="/contact" className="text-gray-400 hover:text-white block transition-colors">Contact Us</Link>
               </div>
             </div>

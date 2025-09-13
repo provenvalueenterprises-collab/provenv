@@ -355,21 +355,6 @@ export default function Dashboard() {
             💳 Wallet Transactions
           </button>
           <button 
-            onClick={() => handleNavigation('/plans')}
-            style={{
-              backgroundColor: 'transparent',
-              color: 'white',
-              border: '1px solid #374151',
-              padding: '12px 16px',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              textAlign: 'left',
-              fontSize: '14px'
-            }}
-          >
-            📋 Plans
-          </button>
-          <button 
             onClick={() => handleNavigation('/fund-wallet')}
             style={{
               backgroundColor: 'transparent',

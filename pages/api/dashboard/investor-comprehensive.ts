@@ -26,8 +26,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log('🔐 Session check:', session ? 'Found' : 'Not found')
   console.log('📧 Session email:', session?.user?.email)
 
-  // For now, let's try to get real data with a fallback approach
-  const userEmail = session?.user?.email || 'realsammy86@gmail.com'
+  // SECURITY: Only allow authenticated users - no fallback to other user data
+  if (!session?.user?.email) {
+    console.log('❌ No valid session or email found')
+    return res.status(401).json({ 
+      error: 'Authentication required',
+      message: 'Please log in to access dashboard data'
+    })
+  }
+
+  const userEmail = session.user.email
   console.log('👤 Using email for data fetch:', userEmail)
 
   let client;
@@ -57,31 +65,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     
     if (userResult.rows.length === 0) {
-      // Return default dashboard structure when no users found
-      console.log('📋 No users found, returning default dashboard structure')
-      return res.status(200).json({
-        user: {
-          name: 'New User',
-          email: userEmail,
-          phone: 'Not provided'
-        },
-        cards: {
-          walletBalance: 3000,
-          activationDate: "Not Set",
-          maturityDate: "Not Set",
-          currentBalance: 0,
-          currentWeek: 0,
-          ledgerBalance: 0,
-          totalDefaults: 0,
-          defaultWeek: 0,
-          totalThriftAccounts: 0,
-          totalReferrals: 0,
-          pendingSettlementAccounts: 0,
-          totalPaidAccounts: 0,
-          referralsWithin60Days: 0,
-          bonusWallet: "0.00"
-        },
-        thriftAccounts: []
+      console.log('❌ No user found for email:', userEmail)
+      return res.status(404).json({
+        error: 'User not found',
+        message: 'No user profile exists for this email address'
       })
     }
 
@@ -157,14 +144,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const currentWeek = firstAccount ? 
       Math.floor((Date.now() - new Date(firstAccount.start_date).getTime()) / (24 * 60 * 60 * 1000)) + 1 : 0
 
-    // For now, set defaults to 0 since this schema doesn't have defaults tracking
-    const totalDefaults = 0
-    const defaultWeek = 0
+    // Calculate real defaults from daily_contributions table
+    const defaultsQuery = `
+      SELECT COUNT(*) as total_defaults
+      FROM daily_contributions dc
+      WHERE dc.user_id = $1 AND dc.status = 'defaulted'
+    `
+    const defaultsResult = await client.query(defaultsQuery, [user.id])
+    const totalDefaults = parseInt(defaultsResult.rows[0]?.total_defaults || 0)
+    console.log('📉 Real defaults calculated:', totalDefaults)
+
+    // Calculate default week (most recent default day number)
+    const recentDefaultQuery = `
+      SELECT 
+        (dc.expected_date - ta.start_date) + 1 as default_day
+      FROM daily_contributions dc
+      JOIN thrift_accounts ta ON dc.thrift_account_id = ta.id
+      WHERE dc.user_id = $1 AND dc.status = 'defaulted'
+      ORDER BY dc.expected_date DESC
+      LIMIT 1
+    `
+    const recentDefaultResult = await client.query(recentDefaultQuery, [user.id])
+    const defaultWeek = parseInt(recentDefaultResult.rows[0]?.default_day || 0)
 
     const dashboardData = {
       user: {
-        name: 'Samuel Ekele',  // hardcoded for now
-        email: 'realsammy86@gmail.com',  // hardcoded for now
+        name: user.display_name || user.email.split('@')[0] || 'User',
+        email: userEmail,  // Use actual session email
         phone: user.phone || 'Not provided'
       },
       cards: {

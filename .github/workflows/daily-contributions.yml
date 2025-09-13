@@ -1,0 +1,65 @@
+name: Daily Contribution Processing
+
+on:
+  schedule:
+    # Run daily at 6:00 AM WAT (5:00 AM UTC)
+    - cron: '0 5 * * *'
+  
+  # Allow manual triggering for testing
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual testing'
+
+jobs:
+  process-daily-contributions:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Process Daily Contributions
+        run: |
+          echo "🕐 Starting daily contribution processing at $(date)"
+          echo "⚡ Processing daily auto-deductions and penalties..."
+          
+          # Call the daily processing API endpoint
+          response=$(curl -s -w "%{http_code}" -X POST \
+            "${{ secrets.APP_URL }}/api/cron/daily-contributions" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET_TOKEN }}" \
+            -H "Content-Type: application/json")
+          
+          http_code="${response: -3}"
+          response_body="${response%???}"
+          
+          echo "📊 HTTP Response Code: $http_code"
+          echo "📋 Response Body: $response_body"
+          
+          if [ "$http_code" = "200" ]; then
+            echo "✅ Daily contribution processing completed successfully"
+            echo "📈 Processing summary:"
+            echo "$response_body" | jq -r '.summary | to_entries[] | "   \(.key): \(.value)"' || echo "$response_body"
+          else
+            echo "❌ Daily contribution processing failed"
+            echo "🔍 Error details: $response_body"
+            exit 1
+          fi
+
+      - name: Notify on Success
+        if: success()
+        run: |
+          echo "🎉 Daily contribution processing completed successfully!"
+          echo "📅 Processed on: $(date)"
+          echo "🔄 Next processing: Tomorrow at 6:00 AM WAT"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "🚨 Daily contribution processing FAILED!"
+          echo "📅 Failed on: $(date)"
+          echo "⚠️  Manual intervention may be required"
+          # In production, you could send notifications here
+          # Example: Slack webhook, email, etc.

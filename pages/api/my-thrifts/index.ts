@@ -29,11 +29,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     client = await pool.connect()
 
-    // Get user profile
+    // Get user profile using correct column names
     const userQuery = `
       SELECT user_id, email, first_name, last_name, phone 
-      FROM users_profiles up
-      WHERE email = $1
+      FROM users_profiles
+      WHERE user_id = (SELECT id FROM auth.users WHERE email = $1)
     `
     const userResult = await client.query(userQuery, [session.user.email])
     
@@ -43,12 +43,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const userProfile = userResult.rows[0]
 
-    // Get user's thrift accounts with plan details
+    // Get user's thrift accounts with plan details using correct column names
     const thriftAccountsQuery = `
       SELECT 
         ta.id,
         ta.status,
         ta.start_date,
+        ta.maturity_date,
         ta.last_contribution_date,
         ta.amount_saved as total_contributed,
         ta.amount_saved as current_balance,
@@ -61,16 +62,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cp.registration_fee,
         cp.duration_months,
         cp.category,
-        (CURRENT_DATE - ta.start_date::date) as days_active,
+        (CURRENT_DATE - ta.start_date) as days_active,
         CASE 
           WHEN ta.status = 'active' AND cp.duration_months IS NOT NULL 
-          THEN LEAST(100, ((CURRENT_DATE - ta.start_date::date) / (cp.duration_months * 30.0)) * 100)
+          THEN LEAST(100, ((CURRENT_DATE - ta.start_date) / (cp.duration_months * 30.0)) * 100)
           ELSE 0
         END as completion_percentage,
         CASE 
           WHEN ta.last_contribution_date IS NOT NULL 
-          THEN (ta.last_contribution_date::date + INTERVAL '1 day')::date
-          ELSE (ta.start_date::date + INTERVAL '1 day')::date
+          THEN (ta.last_contribution_date + INTERVAL '1 day')
+          ELSE (ta.start_date + INTERVAL '1 day')
         END as next_contribution_date
       FROM thrift_accounts ta
       JOIN contribution_plans cp ON cp.id = ta.plan_id
@@ -79,20 +80,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     `
     const thriftResult = await client.query(thriftAccountsQuery, [userProfile.user_id])
 
-    // Get recent contributions for each thrift account
+    // Get recent contributions for each thrift account using correct column names
     const contributionsQuery = `
       SELECT 
         dc.id,
         dc.thrift_account_id,
-        dc.amount,
-        dc.contribution_date,
+        dc.actual_amount as amount,
+        dc.expected_date as contribution_date,
         dc.status,
         dc.created_at,
         ta.id as account_id
       FROM daily_contributions dc
       JOIN thrift_accounts ta ON ta.id = dc.thrift_account_id
       WHERE ta.user_id = $1
-      ORDER BY dc.contribution_date DESC
+      ORDER BY dc.expected_date DESC
       LIMIT 50
     `
     const contributionsResult = await client.query(contributionsQuery, [userProfile.user_id])

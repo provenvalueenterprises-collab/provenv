@@ -300,6 +300,22 @@ export default function InvestorDashboard() {
           >
             📋 Terms & Conditions
           </button>
+          
+          <button 
+            onClick={() => window.open('/refund-policy', '_blank')}
+            style={{
+              backgroundColor: 'transparent',
+              color: 'white',
+              border: '1px solid #374151',
+              padding: '12px 16px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              textAlign: 'left',
+              fontSize: '14px'
+            }}
+          >
+            💰 Refund Policy
+          </button>
         </div>
       </div>
 

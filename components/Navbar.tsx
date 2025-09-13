@@ -18,10 +18,9 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    if (transparent) {
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
+    // Always add scroll listener for sticky behavior
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [transparent]);
 
   const navLinks = [
@@ -51,14 +50,14 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
     setIsMobileMenuOpen(false);
   };
 
-  const navbarClasses = `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+  const navbarClasses = `sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
     transparent && !isScrolled
       ? 'bg-transparent'
-      : 'bg-white/95 backdrop-blur-md shadow-lg'
-  }`;
+      : 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100'
+  } w-full`;
 
   const textClasses = `transition-colors duration-300 ${
-    transparent && !isScrolled ? 'text-white' : 'text-gray-900'
+    transparent && !isScrolled ? 'text-white drop-shadow-lg' : 'text-gray-900'
   }`;
 
   return (
@@ -88,7 +87,11 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
                     onMouseLeave={() => setIsDropdownOpen(false)}
                   >
                     <button
-                      className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors hover:bg-primary-50 ${textClasses}`}
+                      className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
+                        transparent && !isScrolled 
+                          ? 'hover:bg-white/10 text-white drop-shadow-lg' 
+                          : 'hover:bg-gray-100 text-gray-900'
+                      }`}
                     >
                       <span>{link.label}</span>
                       <ChevronDown className="w-4 h-4" />
@@ -111,7 +114,11 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
                 ) : (
                   <button
                     onClick={() => handleNavClick(link.href)}
-                    className={`px-3 py-2 rounded-lg transition-colors hover:bg-primary-50 ${textClasses}`}
+                    className={`px-3 py-2 rounded-lg transition-colors ${
+                      transparent && !isScrolled 
+                        ? 'hover:bg-white/10 text-white drop-shadow-lg' 
+                        : 'hover:bg-gray-100 text-gray-900'
+                    }`}
                   >
                     {link.label}
                   </button>
@@ -124,13 +131,17 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
           <div className="hidden lg:flex items-center space-x-4">
             <Link
               href="/login"
-              className={`px-4 py-2 rounded-lg transition-colors hover:bg-primary-50 ${textClasses}`}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                transparent && !isScrolled 
+                  ? 'hover:bg-white/10 text-white drop-shadow-lg' 
+                  : 'hover:bg-gray-100 text-gray-900'
+              }`}
             >
               Login
             </Link>
             <Link
               href="/register"
-              className="px-6 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all transform hover:scale-105"
+              className="px-6 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg"
             >
               Sign Up
             </Link>
@@ -138,7 +149,11 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
 
           {/* Mobile menu button */}
           <button
-            className={`lg:hidden p-2 rounded-lg ${textClasses}`}
+            className={`lg:hidden p-2 rounded-lg ${
+              transparent && !isScrolled 
+                ? 'text-white drop-shadow-lg hover:bg-white/10' 
+                : 'text-gray-900 hover:bg-gray-100'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
@@ -200,7 +215,7 @@ const Navbar: React.FC<NavbarProps> = ({ transparent = false }) => {
                 </Link>
                 <Link
                   href="/register"
-                  className="block w-full text-center px-4 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg hover:from-primary-700 hover:to-secondary-700 transition-all"
+                  className="block w-full text-center px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all shadow-lg"
                 >
                   Sign Up
                 </Link>
